@@ -44,6 +44,7 @@ class board:
     Returns
     -------
     returns true or false based on how successful the placing of the piece is
+            if it returns false then the colum is full
     """
     if(self.array[0][colum]):
       return False
@@ -63,11 +64,10 @@ class board:
     ----------
     player : int
       the number the player is.  Starts at 1 and goes up. (zero represents a empty space)
-    #note player var might not be need(tba if it is to be removed)
 
     Returns
     -------
-      Returns if the player won
+      Returns true or false if the player indicated won
     """
     center:p.point=self.pieceOrder[-1]
     i=len(self.pieceOrder)-1
@@ -75,36 +75,75 @@ class board:
       center=self.pieceOrder[i]
       i-=1
     refPoint:p.point=p.point(center.x,center.y)
-    print("in a row"+str(self.inARow))
     for i in range(-1,2):
      for j in range(-1,2):
-      refPoint.x=center.x+(i)
-      refPoint.y=center.y+(j)
-      print("ref "+str(refPoint))
-      print(str(refPoint.x<self.array.shape[1]) +" "+ str(refPoint.y<self.array.shape[0]))
+      refPoint.x=center.x+(j)
+      refPoint.y=center.y+(i)
       if(refPoint.x<self.array.shape[1] and refPoint.y<self.array.shape[0] 
       and refPoint.checkVal(self.array,player)):
-        print(str(j)+" "+str(i))
-        print("center "+str(center)+" val "+str(self.array[center.y,center.x]))
-        print(str(1)+" "+str(self.checkWinHelper(center,j,i,player,1))+" "+str(self.checkWinHelper(center,-j,-i,player,1)))
         if(1+self.checkWinHelper(center,j,i,player,1)+self.checkWinHelper(center,-j,-i,player,1)>=self.inARow):
           return True
 
     return False
   #Doc TBD just ask kyle
   def checkWinHelper(self,center:p.point,x:int,y:int,player:int,d:int)-> int:
+    """
+    The method is a recursive helper method to check the pieces linearly to see if someone won
+
+    Parameters
+    ----------
+    center : point
+      the center point for reference when checking. The code will start here and head outwards from this point
+    x : int
+      the direction on the x axis being checked.  -1=left, 0 = x is unchanged , 1=right
+    y : int
+      the direction on the y axis being checked.  -1=up, 0 = x is unchanged , 1=down
+    player : int
+      the number the player is.  Starts at 1 and goes up. (zero represents a empty space)
+    d : int
+      the distance from the center point being checked
+    Returns
+    -------
+      Returns how many in a row of a players piece there is 
+    """
     if(x==0 and y==0):
       return 0
-    point2:p.point=p.point((center.x+(x*d)),(center.y+(y*d)))
-    print(point2)
+    #center point is taken and from there a new point is made d distance and x,y direction from center
+    point2:p.point=p.point((center.y+(y*d)),(center.x+(x*d)))
     #in shape row is 0, colum is 1
+    #if statement checks if it is in the array bounds
     if(point2.x<self.array.shape[0] and point2.y<self.array.shape[1] and point2.x>=0 and point2.y>=0):
+      #once it hits a point that is not the player then backtrack
       if(not(point2.checkVal(self.array,player))):
         return 0
       else:
         return 1+self.checkWinHelper(center,x,y,player,(d+1))
     return 0
+  #Use this function for get the array to be used somewhere else
   def getBoard(self):
+    """
+    The method is a get method to read the data of the board
+
+    Returns
+    -------
+      Returns the numpy array that is used for the board
+    """
     return self.array
+  def getValueOfPoint(self,row:int,colum:int):
+    """
+    The method is a get method to read the data of the board
+
+    Parameters
+    ----------
+    row : int 
+      the row of the item being checked
+    colum : int
+      the colum of the item being checked
+
+    Returns
+    -------
+      Returns the numpy array that is used for the board
+    """
+    return self.array[row][colum]
 
 
