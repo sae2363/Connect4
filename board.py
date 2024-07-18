@@ -30,7 +30,7 @@ class board:
     self.inARow=inARowToWin
     self.pieceOrder=[]
 
-  def placePiece(self,colum:int,player:int)-> bool:
+  def placePiece(self,state:np.array,colum:int,player:int)-> bool:
     """
     The method places a piece on the board at the colum provided and accounts for gravity 
 
@@ -46,19 +46,19 @@ class board:
     returns true or false based on how successful the placing of the piece is
             if it returns false then the colum is full
     """
-    if(self.array[0][colum]):
+    if(state[0][colum]):
       return False
     i=0
-    while(i<self.array.shape[0] and self.array[i][colum]==0):
+    while(i<state.shape[0] and state[i][colum]==0):
       i+=1
-    self.array[i-1,colum]=player
+    state[i-1,colum]=player
     self.pieceOrder.append(p.point(i-1,colum))
     return True
 
-  def checkColum(self,c:int)->bool:
-    return self.array[0][c]
+  def checkColum(self,state:np.array,c:int)->bool:
+    return state[0][c]
 
-  def checkWin(self,player:int):
+  def checkWin(self,state:np.array,player:int):
     """
     The method determines if there is a winner for the game by checking the last placed piece by the player
 
@@ -73,7 +73,7 @@ class board:
     """
     center:p.point=self.pieceOrder[-1]
     i=len(self.pieceOrder)-1
-    while(self.array[center.y][center.x]!=player):
+    while(state[center.y][center.x]!=player):
       center=self.pieceOrder[i]
       i-=1
     refPoint:p.point=p.point(center.x,center.y)
@@ -81,13 +81,13 @@ class board:
      for j in range(-1,2):
       refPoint.x=center.x+(j)
       refPoint.y=center.y+(i)
-      if(refPoint.x<self.array.shape[1] and refPoint.y<self.array.shape[0] 
-      and refPoint.checkVal(self.array,player)):
-        if(1+self.checkWinHelper(center,j,i,player,1)+self.checkWinHelper(center,-j,-i,player,1)>=self.inARow):
+      if(refPoint.x<state.shape[1] and refPoint.y<state.shape[0] 
+      and refPoint.checkVal(state,player)):
+        if(1+self.checkWinHelper(state,center,j,i,player,1)+self.checkWinHelper(state,center,-j,-i,player,1)>=self.inARow):
           return True
 
     return False
-  def checkWinHelper(self,center:p.point,x:int,y:int,player:int,d:int)-> int:
+  def checkWinHelper(self,state:np.array,center:p.point,x:int,y:int,player:int,d:int)-> int:
     """
     The method is a recursive helper method to check the pieces linearly to see if someone won
 
@@ -113,12 +113,12 @@ class board:
     point2:p.point=p.point((center.y+(y*d)),(center.x+(x*d)))
     #in shape row is 0, colum is 1
     #if statement checks if it is in the array bounds
-    if(point2.x<self.array.shape[0] and point2.y<self.array.shape[1] and point2.x>=0 and point2.y>=0):
+    if(point2.x<state.shape[0] and point2.y<state.shape[1] and point2.x>=0 and point2.y>=0):
       #once it hits a point that is not the player then backtrack
-      if(not(point2.checkVal(self.array,player))):
+      if(not(point2.checkVal(state,player))):
         return 0
       else:
-        return 1+self.checkWinHelper(center,x,y,player,(d+1))
+        return 1+self.checkWinHelper(state,center,x,y,player,(d+1))
     return 0
   #Use this function for get the array to be used somewhere else
   def getBoard(self):
@@ -148,15 +148,17 @@ class board:
     return self.array[row][colum]
   
   #Code below is methods to be used by the avd search algorithms 
-
+  #Note: State is just the board object 
   def initial_state(self)-> np.array:
     """Generate the state representing the game's initial setup.
 
         The connect4 board is represented using an N x N NumPy array.
 
+        :Parameters  state:  A numpy array that represents the board
         :returns    Initial state of the game as a 2d array
     """
-    return self.array
+
+    return np.zeros(self.array.shape[0],self.array.shape[0])
   
   def current_player(self)-> int:
     """
@@ -170,12 +172,50 @@ class board:
       return 0
     return self.array[self.pieceOrder[-1].y][self.pieceOrder[-1].x]
   
-  def actions(self,board)-> set[p.point]:
-    for i in range(self.array.shape[0]):
-      for j in range(self.array.shape[1]):
-        if(self.array[i][j])
+  def current_player(self,state:np.array)-> int:
+    """
+    Find which player has the move in the provided state of the board object.
 
-    return 
+      Player "1" goes first (MAX), then "2" (MIN), etc.
+
+      :Parameters  state:  A numpy array that represents the board
+      :returns    Player whose turn it is to move
+    """
+    if(state.shape[0]==0):
+      return 0
+    return state[self.pieceOrder[-1].y][self.pieceOrder[-1].x]
+  
+  def actions(self,state:np.array)-> set[p.point]:
+    """
+    Gives the set of the possible actions that can be taken as a set of points
+
+      Player "1" goes first (MAX), then "2" (MIN), etc.
+
+      :Parameters  state:  A numpy array that represents the board
+      :returns    Player whose turn it is to move
+    """
+    values:set[p.point]={}
+    for i in range(state.shape[0]):
+      for j in range(state.shape[1]):
+        if(state[i][j]==0):
+          values.add(p.point(i,j))
+    return values
+  
+  def result(self,state:np.array,action:p.point)-> np.array:
+    """Simulate the result of applying the given action in the given state.
+
+        The state contains information on which player (MAX or MIN) should move next.
+            MAX is connect4 player "X", represented by a board entry of 1
+            MIN is connect4 player "O", represented by a board entry of 2
+
+        :param      state       Game state in which the action is applied represented as a numpy array
+        :param      action      Action applied in the game as  a point to place the piece
+        :returns    Resulting state after applying the action
+        """
+    
+    return
+  
+
   
 
 
