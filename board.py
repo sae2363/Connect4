@@ -55,7 +55,9 @@ class board:
     self.pieceOrder.append(p.point(i-1,colum))
     return True
 
-  
+  def checkColum(self,c:int)->bool:
+    return self.array[0][c]
+
   def checkWin(self,player:int):
     """
     The method determines if there is a winner for the game by checking the last placed piece by the player
@@ -85,7 +87,6 @@ class board:
           return True
 
     return False
-  #Doc TBD just ask kyle
   def checkWinHelper(self,center:p.point,x:int,y:int,player:int,d:int)-> int:
     """
     The method is a recursive helper method to check the pieces linearly to see if someone won
@@ -145,5 +146,36 @@ class board:
       Returns the numpy array that is used for the board
     """
     return self.array[row][colum]
+  
+  #Code below is methods to be used by the avd search algorithms 
+
+  def initial_state(self)-> np.array:
+    """Generate the state representing the game's initial setup.
+
+        The connect4 board is represented using an N x N NumPy array.
+
+        :returns    Initial state of the game as a 2d array
+    """
+    return self.array
+  
+  def current_player(self)-> int:
+    """
+    Find which player has the move in the current state of the board object.
+
+      Player "1" goes first (MAX), then "2" (MIN), etc.
+
+      :returns    Player whose turn it is to move
+    """
+    if(self.array.shape[0]==0):
+      return 0
+    return self.array[self.pieceOrder[-1].y][self.pieceOrder[-1].x]
+  
+  def actions(self,board)-> set[p.point]:
+    for i in range(self.array.shape[0]):
+      for j in range(self.array.shape[1]):
+        if(self.array[i][j])
+
+    return 
+  
 
 

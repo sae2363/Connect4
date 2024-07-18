@@ -1,5 +1,10 @@
 #Start the code from here
-
+import gui
+import board
+import point
+"""
+Notes: p1 is max and p2 is min 
+"""
 def start():
     """
     Todo
