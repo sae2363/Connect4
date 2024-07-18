@@ -174,6 +174,29 @@ class board:
   
   def current_player(self,state:np.array)-> int:
     """
+    Find which player has the move in the current state of the board object.
+
+      Player "1" goes first (MAX), then "2" (MIN), etc.
+
+      :returns    Player whose turn it is to move
+    """
+    if(state.shape[0]==0):
+      return 0
+    p1=0
+    p2=0
+    for i in range(state.shape[0]):
+      for j in range(state.shape[1]):
+        if(state[i][j]==1):
+          p1+=1
+        if(state[i][j]==2):
+          p2+=1
+    if(p1>p2):
+      return 1
+    else:
+      return 2
+  
+  def current_player(self,state:np.array)-> int:
+    """
     Find which player has the move in the provided state of the board object.
 
       Player "1" goes first (MAX), then "2" (MIN), etc.
@@ -212,8 +235,28 @@ class board:
         :param      action      Action applied in the game as  a point to place the piece
         :returns    Resulting state after applying the action
         """
+    stateCopy=np.copy(state)
+    player=1
+    if(self.current_player(stateCopy)==1):
+      player=2
+    self.placePiece(stateCopy,action.x,player)
+    return stateCopy
+  
+  def check_winner(self,state:np.array)->bool:
+    player=self.current_player(state)
+    return self.checkWin(state,player) 
+  
+  def is_terminal(self, state:np.array)->bool:
+    #if full and if winner if found
+    isFull=True
+    for i in range(state.shape[0]):
+      for j in range(state.shape[1]):
+        if(state[i][j]==0):
+          isFull=False
+    if(isFull):
+      return True
     
-    return
+
   
 
   
