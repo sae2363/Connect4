@@ -59,6 +59,8 @@ class board:
     return state[0][c]
 
   def checkWin(self,state:np.array,player:int):
+    self.checkWin(self,state,player,self.pieceOrder[-1])
+  def checkWin(self,state:np.array,player:int,start:p.point):
     """
     The method determines if there is a winner for the game by checking the last placed piece by the player
 
@@ -71,11 +73,7 @@ class board:
     -------
       Returns true or false if the player indicated won
     """
-    center:p.point=self.pieceOrder[-1]
-    i=len(self.pieceOrder)-1
-    while(state[center.y][center.x]!=player):
-      center=self.pieceOrder[i]
-      i-=1
+    center:p.point=start
     refPoint:p.point=p.point(center.x,center.y)
     for i in range(-1,2):
      for j in range(-1,2):
