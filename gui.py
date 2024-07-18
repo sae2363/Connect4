@@ -1,17 +1,21 @@
 import tkinter
 from tkinter import ttk
 
-m = tkinter.Tk()
+class GUI:
+    def __init__(self) -> None:
+        pass
 
-'''
-widgets are added here
-'''
+    m = tkinter.Tk()
 
-frm = ttk.Frame(m, padding=10)
-frm.grid()
-ttk.Label(frm, text="Hello World!").grid(column=0, row=0)
-ttk.Button(frm, text="Quit", command=m.destroy).grid(column=1, row=0)
+    '''
+    widgets are added here
+    '''
 
-# Test to make sure Tkinter works
+    frm = ttk.Frame(m, padding=10)
+    frm.grid()
+    ttk.Label(frm, text="Hello World!").grid(column=0, row=0)
+    ttk.Button(frm, text="Quit", command=m.destroy).grid(column=1, row=0)
 
-m.mainloop()
+    # Test to make sure Tkinter works
+
+    m.mainloop()
