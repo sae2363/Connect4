@@ -18,3 +18,13 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             state
         ), "Alpha-beta search expects a non-terminal state as input"
         #program the algorithm 
+        """
+        idea so far
+
+        while loop
+        make a tree with nodes to store the data up to n deep
+        go to a leaf of the tree and start randomly pick moves till terminal state is reached
+        with this result, go up child node till hit root and update
+        pick the actions with the highest win rate
+        question right now do i save the tree to use later or not
+        """

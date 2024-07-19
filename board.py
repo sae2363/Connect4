@@ -189,6 +189,8 @@ class board(ASP[np.array, p.point]):
       return 0
     return self.array[self.pieceOrder[-1].y][self.pieceOrder[-1].x]
   
+  def player(self, state: np.array) -> int:
+    return self.current_player(state)
   def current_player(self,state:np.array)-> int:
     """
     Find which player has the move in the current state of the board object.
