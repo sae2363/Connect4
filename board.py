@@ -1,6 +1,7 @@
 import numpy as np
 import point as p
-class board:
+import ASP
+class board(ASP[np.array, p.point]):
   #stores the game board data
   array:int
   #number in a row to win
@@ -58,16 +59,34 @@ class board:
   def checkColum(self,state:np.array,c:int)->bool:
     return state[0][c]
 
-  def checkWin(self,state:np.array,player:int):
-    self.checkWin(self,state,player,self.pieceOrder[-1])
-  def checkWin(self,state:np.array,player:int,start:p.point):
+  def checkLastWin(self,state:np.array,player:int)->bool:
     """
     The method determines if there is a winner for the game by checking the last placed piece by the player
 
     Parameters
     ----------
+    state : np.array
+      The 2d array representing the game board
     player : int
       the number the player is.  Starts at 1 and goes up. (zero represents a empty space)
+
+    Returns
+    -------
+      Returns true or false if the player indicated won
+    """
+    return self.checkWin(state,player,self.pieceOrder[-1])
+  def checkWin(self,state:np.array,player:int,start:p.point)-> bool:
+    """
+    The method determines if there is a winner for the game by checking the point provided by the player
+
+    Parameters
+    ----------
+    state : np.array
+      The 2d array representing the game board
+    player : int
+      the number the player is.  Starts at 1 and goes up. (zero represents a empty space)
+    start : p.point
+      the coordinates of the point to be checked
 
     Returns
     -------
@@ -223,14 +242,14 @@ class board:
     return values
   
   def result(self,state:np.array,action:p.point)-> np.array:
-    """Simulate the result of applying the given action in the given state.
+    """Simulate the result of applying the given action in the provided state.
 
         The state contains information on which player (MAX or MIN) should move next.
-            MAX is connect4 player "X", represented by a board entry of 1
-            MIN is connect4 player "O", represented by a board entry of 2
+            MAX is connect4 player "1", represented by a board entry of 1
+            MIN is connect4 player "2", represented by a board entry of 2
 
         :param      state       Game state in which the action is applied represented as a numpy array
-        :param      action      Action applied in the game as  a point to place the piece
+        :param      action      Action applied in the game as a point to place the piece
         :returns    Resulting state after applying the action
         """
     stateCopy=np.copy(state)
@@ -240,11 +259,39 @@ class board:
     self.placePiece(stateCopy,action.x,player)
     return stateCopy
   
-  def check_winner(self,state:np.array)->bool:
-    player=self.current_player(state)
-    return self.checkWin(state,player) 
+  def who_is_winner(self,state:np.array)->int:
+    """The method determines if there is a winner for the game and who it is
+        0 is no player
+        1 is player 1
+        2 is player 2
+
+    Parameters
+    ----------
+    state : np.array
+      The 2d array representing the game board
+
+    Returns
+    -------
+      Returns the player who won"""
+    player=0
+    for i in range(state.shape[0]):
+      for j in range(state.shape[1]):
+        player=state[i][j]
+        if(player!=0 and self.checkWin(state,player,p.point(j,i))):
+            return player
+    return 0
   
   def is_terminal(self, state:np.array)->bool:
+    """Checks if the game is over in the current state
+
+    Parameters
+    ----------
+    state : np.array
+      The 2d array representing the game board
+    
+    Returns
+    -------
+      Returns true or false if the game is in a finished state"""
     #if full and if winner if found
     isFull=True
     for i in range(state.shape[0]):
@@ -253,6 +300,33 @@ class board:
           isFull=False
     if(isFull):
       return True
+    return self.who_is_winner(state)!=0
+  def utility(self, state:np.array)-> float:
+    """The method finds the value of the terminal state and works for both players perspectives
+
+        in the game of connect 4
+          1 is player 1 winning
+          0 is player 2 winning
+          0.5 is a draw
+          
+    Parameters
+    ----------
+    state : np.array
+      The 2d array representing the game board
+
+    Returns
+    -------
+      Returns a value for the utility of the state"""
+    player=self.who_is_winner(state)
+    match player:
+      case 0:
+        return 0.5
+      case 1:
+        return 1
+      case 2:
+        return 0
+    
+  
     
 
   
