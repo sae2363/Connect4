@@ -177,7 +177,7 @@ class board(ASP[np.array, p.point]):
 
     return np.zeros(self.array.shape[0],self.array.shape[0])
   
-  def current_player(self)-> int:
+  def current_player_board(self)-> int:
     """
     Find which player has the move in the current state of the board object.
 
@@ -212,7 +212,7 @@ class board(ASP[np.array, p.point]):
     else:
       return 2
   
-  def current_player(self,state:np.array)-> int:
+  def last_player_move(self,state:np.array)-> int:
     """
     Find which player has the move in the provided state of the board object.
 
