@@ -1,6 +1,5 @@
 from ..ASP import StateT, ActionT
-from abc import ABC
-from typing import Generic
+import board
 from agent import AdversarialAgent
 import point as p
 
@@ -16,8 +15,7 @@ class realAgent(AdversarialAgent[StateT, ActionT]):
         :param      state       Game state
         :returns    Action chosen by the agent
         """
-        curr_player = self._problem.player(state) # DO WHEN CURRENT_PLAYER METHODS GET CORRECTED
-        curr_player_str = self._problem.player_to_string(curr_player) # DO WHEN CURRENT_PLAYER METHODS GET CORRECTED
+        curr_player_str = self._problem.player(state)
 
         # Compute all legal moves and convert them to strings for printing
         legal_actions = self._problem.actions(state)
