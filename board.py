@@ -261,6 +261,18 @@ class board(ASP[np.array, p.point]):
     self.placePiece(stateCopy,action.x,player)
     return stateCopy
   
+  def result(self,state:np.array,actions:list[p.point])-> np.array:
+    """Simulate the result of applying multiple actions from the given state.
+
+        :param      state       Game state from which the actions are applied
+        :param      actions     List of actions
+        :returns    Resulting state after applying the actions, in list order
+    """
+    curr_state = state
+    for a in actions:
+      curr_state = self.result(curr_state, a)
+    return curr_state
+  
   def who_is_winner(self,state:np.array)->int:
     """The method determines if there is a winner for the game and who it is
         0 is no player
