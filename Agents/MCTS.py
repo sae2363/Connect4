@@ -4,12 +4,12 @@ from typing import Generic
 from Agents.agent import AdversarialAgent
 import Agents.nodeClass as n
 import numpy as np
-import math
+import math,random
 import time
 
 class MCTS(AdversarialAgent[StateT, ActionT], ABC):
     """A game-playing agent defining a strategy for adversarial search problems."""
-    root:n.node
+    root:n.node=None
     def choose_action(self, state: StateT) -> ActionT:
         """Select an action for the given state using the agent's strategy.
 
@@ -21,23 +21,31 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         assert not self._problem.is_terminal(
             state
         ), "MCTS expects a non-terminal state as input"
-        if(root==None):
+        try:
+            if(root==None):
+                root=None
+        except:
             root=n.node(state,None,self._problem.is_terminal(state),self._problem.player(state),None)
 
         leafList=[]
         self.makeLeafList(root,leafList)
         startTime=time.time_ns()
-        endTime=startTime+1000000000
+        timeToDecide=int(3*1000000000) #time in ns for bot to run MCTS
+        endTime=startTime+timeToDecide
         count=0
         while(time.time_ns()<endTime):
-            node:n.node=self.findLeafUTC(root)
-            self.expand(node)
-            result=self.playOut(node.state)
-            self.backTrack(root,result)
+            node:n.node=self.findRandomLeaf(root)
+            nextNode=self.expand(node)
+            result=self.playOut(np.copy(nextNode.state))
+            #print(result)
+            self.backTrack(nextNode,result)
             count+=1
+        #self.printTree(root)
         print("Number of runs "+str(count))
+        print("tree Size "+str(self.treeSize(root)))
         bestActionNode=self.getBest(root)
-        root=bestActionNode
+        #root=bestActionNode
+        #print
         return bestActionNode.action
 
         """
@@ -50,22 +58,47 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         pick the actions with the highest win rate
         question right now do i save the tree to use later or not
         """
-    def treeSize(self,)
+    def printTree(self,root:n.node, level=0):
+        size=len(root.nextNodes)
+        for i in range(int(size/2)):
+            self.printTree(root.nextNodes[i],level + 1)
+        print("     " * level + " "+str(root.p1Win+root.p2Win))
+        for i in range(int(size/2)):
+            self.printTree(root.nextNodes[math.ceil(size/2)+i],level + 1)
+    def treeSize(self,root:n.node):
+        count=0
+        if(len(root.nextNodes)==0):
+            return 1
+        for n in root.nextNodes:
+            count+=self.treeSize(n)
+        return count
     def getBest(self,root:n.node):
-        maxUTC=-10000
+        """maxUTC:float=-10000
         for child in root.nextNodes:
             childUTC=self.find_UCB1(child)
             if(childUTC>maxUTC):
                 bestNode=child
-                maxUTC=childUTC
+                maxUTC=childUTC"""
+        #print("max UTC "+str(maxUTC))
+        maxPlay:float=-10000
+        for child in root.nextNodes:
+            childPlay=child.p1Win+child.p2Win
+            if(childPlay>maxPlay):
+                bestNode=child
+                maxPlay=childPlay
+            print(str(child.action)+"  "+str(child.p1Win+child.p2Win)+"  "+str(self.find_UCB1(child)))
         return bestNode
         
-    def backTrack(self,root:n.node,winner:int):
+    def backTrack(self,root:n.node,winner:float):
         current=root
         while(current!=None):
-            if(winner==1):
+            #if(current.player==1):
+            if(winner<=0.6 and winner>=0.4):
                 current.p1Win+=1
-            if(winner==2):
+                current.p2Win+=1
+            if(winner>=0.6):
+                current.p1Win+=1
+            if(winner<=0.4):
                 current.p2Win+=1
             current=current.parent
             
@@ -76,16 +109,28 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         actionList=[]
         for a in self._problem.actions(state):
             actionList.append(a)
-        action=actionList[int((np.random.random()*10000)%len(actionList))]
+        #print([str(item) for item in actionList])
+        action=random.choice(actionList)
         nextState=self._problem.result(state,action)
         return self.playOut(nextState)
 
 
     def expand(self, root:n.node)->n.node:
         actionList=[]
+        if(self._problem.is_terminal(root.state)):
+            return root
         for a in self._problem.actions(root.state):
             actionList.append(a)
-        action=actionList[int((np.random.random()*10000)%len(actionList))]
+        #try to remove dupe,  change the first one to a while loop
+        i=0
+        while (i<len(actionList)):
+            for b in root.nextNodes:
+                if(actionList[i].x==b.action.x and actionList[i].y==b.action.y):
+                    del actionList[i]
+                    i-=1
+                    break
+            i+=1
+        action=random.choice(actionList)
         nextState=self._problem.result(root.state,action)
         node=n.node(nextState,root,self._problem.is_terminal(nextState),self._problem.player(nextState),action)
         root.nextNodes.append(node)
@@ -112,7 +157,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         bestNode:n.node
         if(len(root.nextNodes)==0):
             return root
-        if(len(root.nextNodes)!=self._problem.actions(root.state)):
+        if(len(root.nextNodes)!=len(self._problem.actions(root.state)) and root.parent!=None):
             rootUTC=self.find_UCB1(root)
             maxUTC=rootUTC
             bestNode=root
@@ -121,8 +166,11 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             if(childUTC>maxUTC):
                 bestNode=child
                 maxUTC=childUTC
-        if(np.array_equal(bestNode.state,root.state) or bestNode==root):
+        #print("max utc "+str(maxUTC))
+        if((np.array_equal(bestNode.state,root.state) or bestNode==root)):
             return root
+        if(maxUTC==0):
+            bestNode=random.choice(root.nextNodes)
 
         return self.findLeafUTC(bestNode)
 
@@ -131,22 +179,27 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
     def findRandomLeaf(self,root:n.node)->n.node:
         if(len(root.nextNodes)==0):
             return root
-        if(len(root.nextNodes)!=len(self._problem.actions(root.state))):
-            number:int=int(np.random.random()*10000) % (2+len(root.nextNodes))
-            if(number<=2):
-                return root
-            else:
-                return self.findRandomLeaf(root)
+        if(len(root.nextNodes)==len(self._problem.actions(root.state))):
+            return self.findRandomLeaf(random.choice(root.nextNodes))
+        #if(len(root.nextNodes)!=len(self._problem.actions(root.state))):
+        number:int=int(np.random.random()*10000) % (2+len(root.nextNodes))
+        if(number<=1):
+            return root
+        else:
+            return self.findRandomLeaf(root.nextNodes[number-2])
 
-        return self.findRandomLeaf(root)
-    def find_UCB1(self,root:n.node):
+        #return self.findRandomLeaf(root)
+    def find_UCB1(self,root:n.node)->float:
         winCount=0
-        if(root.parent==None):
-            return 0
         if(root.player==1):
             winCount=root.p1Win
         else:
             winCount=root.p2Win
+        if(root.parent==None):
+            try:
+                return 0
+            except:
+                return 0 
         try:
             ucb1=winCount/(root.p1Win+root.p2Win)+ math.sqrt(2)*math.sqrt(math.log(root.parent.p1Win+root.parent.p2Win)/(root.p1Win+root.p2Win))
         except:
