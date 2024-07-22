@@ -48,12 +48,12 @@ class board(ASP[NDArray[np.int32], p.point]):
     returns true or false based on how successful the placing of the piece is
             if it returns false then the colum is full
     """
-    if(state[0][colum]):
+    if(state[0][colum]!=0):
       return False
     i=0
     while(i<state.shape[0] and state[i][colum]==0):
       i+=1
-    state[i-1,colum]=player
+    state[i-1][colum]=player
     self.pieceOrder.append(p.point(i-1,colum))
     return True
 
@@ -210,6 +210,7 @@ class board(ASP[NDArray[np.int32], p.point]):
           p1+=1
         if(state[i][j]==2):
           p2+=1
+    #print(str(p1)+" "+str(p2))
     if(p1>p2):
       return 2
     else:
@@ -242,6 +243,10 @@ class board(ASP[NDArray[np.int32], p.point]):
       for j in range(state.shape[1]):
         if(state[i][j]==0):
           values.add(p.point(i,j))
+    """for i in range(state.shape[0]):
+      #for j in range(state.shape[1]):
+        if(state[0][i]==0):
+          values.add(p.point(i,0))"""
     return values
   
   def result(self,state:np.array,action:p.point)-> np.array:
@@ -256,9 +261,8 @@ class board(ASP[NDArray[np.int32], p.point]):
         :returns    Resulting state after applying the action
         """
     stateCopy=np.copy(state)
-    player=1
-    if(self.current_player(stateCopy)==1):
-      player=2
+    player=self.current_player(stateCopy)
+    #print("Player"+str(player))
     self.placePiece(stateCopy,action.x,player)
     return stateCopy
   
@@ -294,7 +298,7 @@ class board(ASP[NDArray[np.int32], p.point]):
     for i in range(state.shape[0]):
       for j in range(state.shape[1]):
         player=state[i][j]
-        if(player!=0 and self.checkWin(state,player,p.point(j,i))):
+        if(player!=0 and self.checkWin(state,player,p.point(i,j))):
             return player
     return 0
   
