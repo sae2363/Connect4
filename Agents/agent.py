@@ -1,4 +1,4 @@
-from ..ASP import StateT, ActionT, ASP
+from Agents.ASPtwo import StateT, ActionT, ASP
 from abc import ABC, abstractmethod
 from typing import Generic
 

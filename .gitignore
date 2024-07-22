@@ -4,3 +4,4 @@ __pycache__/board.cpython-312.pyc
 __pycache__/point.cpython-312.pyc
 .vscode/settings.json
 .vscode/
+cli.py

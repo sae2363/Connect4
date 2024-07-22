@@ -1,6 +1,5 @@
-from ..ASP import StateT, ActionT
-import board
-from agent import AdversarialAgent
+from Agents.ASPtwo import StateT, ActionT
+from Agents.agent import AdversarialAgent
 import point as p
 
 

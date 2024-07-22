@@ -1,9 +1,10 @@
 import numpy as np
 import point as p
-import ASP
-class board(ASP[np.array, p.point]):
+from ASP import ASP
+from numpy.typing import NDArray
+class board(ASP[NDArray[np.int32], p.point]):
   #stores the game board data
-  array:int
+  array:np.array
   #number in a row to win
   inARow:int
   #list defining the order the pieces were placed in
@@ -99,8 +100,8 @@ class board(ASP[np.array, p.point]):
       refPoint.x=center.x+(j)
       refPoint.y=center.y+(i)
       if(refPoint.x<state.shape[1] and refPoint.y<state.shape[0] 
-      and refPoint.checkVal(state,player)):
-        if(1+self.checkWinHelper(state,center,j,i,player,1)+self.checkWinHelper(state,center,-j,-i,player,1)>=self.inARow):
+      and refPoint.checkVal(state,player) and center.checkVal(state,player)):
+        if((1+self.checkWinHelper(state,center,j,i,player,1)+self.checkWinHelper(state,center,-j,-i,player,1))>=self.inARow):
           return True
 
     return False
@@ -210,9 +211,9 @@ class board(ASP[np.array, p.point]):
         if(state[i][j]==2):
           p2+=1
     if(p1>p2):
-      return 1
-    else:
       return 2
+    else:
+      return 1
   
   def last_player_move(self,state:np.array)-> int:
     """
@@ -236,7 +237,7 @@ class board(ASP[np.array, p.point]):
       :Parameters  state:  A numpy array that represents the board
       :returns    Player whose turn it is to move
     """
-    values:set[p.point]={}
+    values:set[p.point]=set()
     for i in range(state.shape[0]):
       for j in range(state.shape[1]):
         if(state[i][j]==0):
@@ -261,7 +262,7 @@ class board(ASP[np.array, p.point]):
     self.placePiece(stateCopy,action.x,player)
     return stateCopy
   
-  def result(self,state:np.array,actions:list[p.point])-> np.array:
+  def result_multiple(self,state:np.array,actions:list[p.point])-> np.array:
     """Simulate the result of applying multiple actions from the given state.
 
         :param      state       Game state from which the actions are applied
@@ -269,8 +270,10 @@ class board(ASP[np.array, p.point]):
         :returns    Resulting state after applying the actions, in list order
     """
     curr_state = state
-    for a in actions:
-      curr_state = self.result(curr_state, a)
+    i=0
+    while(i<len(actions)):
+      curr_state = self.result(curr_state, actions[i])
+      i+=1
     return curr_state
   
   def who_is_winner(self,state:np.array)->int:
