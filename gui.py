@@ -35,7 +35,7 @@ class GUI:
 
         for i in range(gridSizeX):
             self.buttonFrame.grid_columnconfigure(i,  weight =1, minsize=300/gridSizeX)
-            Button(self.buttonFrame, text="^").grid(row=gridSizeY, column=i) # assign functionality
+            Button(self.buttonFrame, text="^", command=lambda: self.on_button_click(i)).grid(row=gridSizeY, column=i) # assign functionality
 
         self.buttonFrame.grid(row=2, column=1) # Draw the board
 
@@ -44,15 +44,12 @@ class GUI:
         self.label1.grid(row=0, column=0)
 
 
+    def on_button_click(self, column):
+        self.label1 = tk.Label(root, text=(column, "Button Clicked!"))
+        self.label1.grid(row=0, column=0)
 
 
-        self.button = tk.Button(root, text="Click Me", command=self.on_button_click)
-
-    def on_button_click(self):
-        self.label1.config(text="Button Clicked!")
-
-
-testState = np.zeros((9, 10))
+testState = np.zeros((7, 6))
 testState[1][1] = '1'
 testState[1][2] = '2'
 testState[2][2] = '1'
