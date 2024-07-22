@@ -34,22 +34,33 @@ class GUI:
         self.buttonFrame = tk.Frame(root, height=20, width=300) # creaste a Frame object called board
 
         for i in range(gridSizeX):
+            text = "^"+str(i)
             self.buttonFrame.grid_columnconfigure(i,  weight =1, minsize=300/gridSizeX)
-            Button(self.buttonFrame, text="^", command=lambda: self.on_button_click(i)).grid(row=gridSizeY, column=i) # assign functionality
+            Button(self.buttonFrame, text=text, command=lambda button_text=text: self.on_button_click(button_text)).grid(row=gridSizeY, column=i) # assign functionality
 
-        self.buttonFrame.grid(row=2, column=1) # Draw the board
+        self.buttonFrame.grid(row=2, column=1) # Draw the button board
 
+        # Below is the code for the AGENT BUTTONS
 
-        self.label1 = tk.Label(root, text="Connect 4")
+        self.agentFrame = tk.Frame(self.root, relief='solid', borderwidth=1).grid()
+
+        self.agent1button = tk.Button(self.agentFrame, text='Monte Carlo Tree Search').grid()
+        self.agent2button = tk.Button(self.agentFrame, text='Alpha-Beta Pruning (MINMAX)').grid()
+
+        # EXTRA
+
+        self.label1 = tk.Label(self.root, text="Connect 4")
         self.label1.grid(row=0, column=0)
 
 
-    def on_button_click(self, column):
+    def on_button_click(self, column): # this function recieves the value of whatever move was selected (which button got pressed)
+        column = column[1]
         self.label1 = tk.Label(root, text=(column, "Button Clicked!"))
         self.label1.grid(row=0, column=0)
+        return int(column)
 
 
-testState = np.zeros((7, 6))
+testState = np.zeros((5, 6))
 testState[1][1] = '1'
 testState[1][2] = '2'
 testState[2][2] = '1'
