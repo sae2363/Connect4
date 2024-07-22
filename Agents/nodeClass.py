@@ -46,7 +46,10 @@ class node:
         p1Fraction = self.p1Win / total
         p2Fraction = self.p2Win / total
         return f"p1: {p1Fraction:.2f}, p2: {p2Fraction:.2f}"
-
+    def __str__(self):
+        return "p1 win "+str(self.p1Win)+" p2 win "+str(self.p2Win)+" "+str(self.player)
+    def __repr__(self):
+        return self.__str__()
     def printTree(self, level=0):
         print("  " * level + self.calculateFraction())
         for child in self.nextNodes:
