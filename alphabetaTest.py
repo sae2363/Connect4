@@ -7,7 +7,7 @@ import time
 
 def Test():   
 
-    g:b.board=b.board(4,3)
+    g:b.board=b.board(4,4,3)
 
     agent1 = ab.AlphaBeta(g) # max
     agent2 = ab.AlphaBeta(g) # min
@@ -18,6 +18,7 @@ def Test():
     app = GUI(root)
 
     app.createBoard(g.array)
+    root.update()
 
     while not g.is_terminal(g.array):
 

@@ -62,7 +62,7 @@ class GUI:
                 elif int(state[j][i]) == 2:
                     foregroundColor = 'red'
                 else: foregroundColor = 'black'
-                Label(self.board, text=int(state[j][i]), foreground=foregroundColor).grid(row=j, column=i)
+                Label(self.board, text=int(state[j][i]), foreground=foregroundColor, bg=foregroundColor).grid(row=j, column=i)
 
         self.board['relief'] = 'solid'
         self.board.grid(row=1, column=1) # Draw the board
