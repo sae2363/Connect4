@@ -5,7 +5,7 @@ import numpy as np
 class GUI:
     def __init__(self, root):
         self.root = root
-        self.root.geometry("800x500")
+        self.root.geometry("500x500")
         self.root.title("Connect 4")
 
 
@@ -72,7 +72,7 @@ class GUI:
         return int(column)
 
 
-testState = np.zeros((5, 6))
+testState = np.zeros((6, 8))
 testState[1][1] = '1'
 testState[1][2] = '2'
 testState[2][2] = '1'
