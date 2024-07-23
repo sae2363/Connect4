@@ -1,19 +1,35 @@
 from board import board as b
 import Agents.MCTS as mc
+from Agents.randomAgent import randomAgent as ra
 import numpy as np
 from Agents.realAgent import realAgent as rl
 
 def runCLI():
-    board_size=None
-    while board_size is None:
-        user_input = input("Please input your desired board size (e.g., 3): ").strip()
+    row=None
+    col=None
+    win=None
+    while row is None:
+        user_input = input("Please input your desired row size (e.g., 3): ").strip()
 
         try:
-            board_size = int(user_input)
+            row = int(user_input)
         except ValueError as e:
-            print(f"{e}\nCannot parse given board size. Please try again...\n")
+            print(f"{e}\nCannot parse given number. Please try again...\n")
+    while col is None:
+        user_input = input("Please input your desired colum size (e.g., 3): ").strip()
 
-    game:b=b(board_size,board_size)
+        try:
+            col = int(user_input)
+        except ValueError as e:
+            print(f"{e}\nCannot parse given number. Please try again...\n")
+    while win is None:
+        user_input = input("Please input your desired number in a row to win (e.g., 3): ").strip()
+
+        try:
+            win = int(user_input)
+        except ValueError as e:
+            print(f"{e}\nCannot parse given number. Please try again...\n")
+    game:b=b(row,col,win)
     player_a = rl(game)
     player_b = mc.MCTS(game)
     i=0
@@ -32,6 +48,8 @@ def runCLI():
             game.placePiece(game.array,temp.x,2)
             i+=1
     winner=game.who_is_winner(game.array)
+    print("winning board")
+    print(game.array)
     match winner:
       case 0:
         print("Its a draw")
@@ -41,7 +59,20 @@ def runCLI():
         print("Player two wins")
 
 def runBotUTC(x,y):
-  game:b=b(4,3)
+  game:b=b(4,4,3)
+  player_a = mc.MCTS(game)
+  player_b = mc.MCTS(game)
+  return runBots(game,player_a,player_b)
+
+def runBotUTC_Ran(x,y):
+  game:b=b(4,4,3)
+  game.placePiece(game.array,0,1)
+  player_a = mc.MCTS(game)
+  player_b = ra(game)
+  return runBots(game,player_a,player_b)
+
+def runBotUTC(x,y):
+  game:b=b(4,4,3)
   player_a = mc.MCTS(game)
   player_b = mc.MCTS(game)
   return runBots(game,player_a,player_b)

@@ -26,38 +26,48 @@ def plot_graphs(graphs):
     plt.show()
 
 start=time.time()
-total_runs=1
-num_threads = 1
 
 results_list = []
-
-threads = []
 
 def worker(thread_id, run_id):
     result = b.runBotUTC(thread_id, run_id)
     results_list.append(result)
 
+def worker1(thread_id, run_id):
+    result = b.runBotUTC_Ran(thread_id, run_id)
+    results_list.append(result)
 
-with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
-    futures = []
-    for run_id in range(total_runs):
-        futures.append(executor.submit(worker, run_id % num_threads, run_id))
+def submit_for_thread(method,total_runs=6,num_threads=3):
+    threads = []
+    with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
+        futures = []
+        for run_id in range(total_runs):
+            futures.append(executor.submit(method, run_id % num_threads, run_id))
 
-    # Ensure all futures are completed
-    concurrent.futures.wait(futures)
-
+        # Ensure all futures are completed
+        concurrent.futures.wait(futures)
+results_list = []
+submit_for_thread(worker)
 #win rate of utc vs utc 
 x1=["Draw","P1_Win","P2_Win"]
 y1=[0,0,0]
 for i in results_list:
     y1[i]+=1
+results_list = []
+
+submit_for_thread(worker1)
+#win rate of utc vs random 
+x2=["Draw","P1_Win","P2_Win"]
+y2=[0,0,0]
+for i in results_list:
+    y2[i]+=1
 
 
 #data
 graphs = [
     {
         'type': 'bar',
-        'title': 'Bar Graph',
+        'title': 'mc vs mc',
         'x_label': 'X-axis',
         'y_label': 'Y-axis',
         'x': x1,
@@ -65,11 +75,11 @@ graphs = [
     },
     {
         'type': 'bar',
-        'title': 'Bar Graph',
+        'title': 'mc vs random',
         'x_label': 'X-axis',
         'y_label': 'Y-axis',
-        'x': ['A', 'B', 'C', 'D', 'E'],
-        'y': [5, 7, 3, 8, 4]
+        'x': x2,
+        'y': y2
     },
     {
         'type': 'scatter',
@@ -92,4 +102,4 @@ graphs = [
 
 end=time.time()
 print("total time = "+str(end-start))
-#plot_graphs(graphs)
+plot_graphs(graphs)

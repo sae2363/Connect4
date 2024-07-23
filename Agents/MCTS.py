@@ -29,7 +29,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             root=n.node(state,None,self._problem.is_terminal(state),self._problem.player(state),None)
 
         startTime=time.time_ns()
-        timeToDecide=int(1*1000000000) #time in ns for bot to run MCTS
+        timeToDecide=int(0.5*1000000000) #time in ns for bot to run MCTS
         endTime=startTime+timeToDecide
         count=0
         self.createTree(root.state,root,0,1)
@@ -55,7 +55,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             winNumber=root.p1Win
         else:
             winNumber=root.p2Win
-        value=str(root.player)+" "+str(int(self.find_UCB1(root)*1000000)/1000000.0)+" "+str(root.action)#(int(((winNumber/(root.p1Win+root.p2Win))*1000))/1000.0)
+        value=str(root.player)+" "+str(int(self.find_UCB1(root)*1000000)/1000000.0)+" "+str(root.action)+" "+str(root.p1Win)+" "+str(root.p2Win)
         print("        " * level + " "+str(value))
         for i in range(size):
             self.printTree(root.nextNodes[i],max,level + 1)
@@ -68,7 +68,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             count+=self.treeSize(n)
         return count
     def getBest(self,root:n.node):
-        maxPlay:float=-10000
+        maxPlay:float=-100000
         for child in root.nextNodes:
             childPlay=child.p1Win+child.p2Win
             if(childPlay>maxPlay):
@@ -177,7 +177,10 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         if(root.parent==None):
             return -100
         try:
-            ucb1=root.totalUtil/(root.total)+ math.sqrt(2)*math.sqrt(math.log(root.parent.total)/(root.total))
+            totalUtil=root.totalUtil
+            if(root.player==1):
+                totalUtil=root.total-root.totalUtil
+            ucb1=(totalUtil/(root.total))+ (math.sqrt(2)*math.sqrt(math.log(root.parent.total*1.0)/float(root.total)))
         except:
             ucb1=1000
         return ucb1

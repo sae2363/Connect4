@@ -9,7 +9,7 @@ class board(ASP[NDArray[np.int32], p.point]):
   inARow:int
   #list defining the order the pieces were placed in
   pieceOrder:list
-  def __init__(self,size:int,inARowToWin:int):
+  def __init__(self,colums:int,rows:int,inARowToWin:int):
     """
     The method creates the connect 4 board
 
@@ -28,7 +28,7 @@ class board(ASP[NDArray[np.int32], p.point]):
     --------
     >>>
     """
-    self.array = np.zeros((size, size))
+    self.array = np.zeros((rows, colums))
     self.inARow=inARowToWin
     self.pieceOrder=[]
 
@@ -131,7 +131,7 @@ class board(ASP[NDArray[np.int32], p.point]):
     point2:p.point=p.point((center.y+(y*d)),(center.x+(x*d)))
     #in shape row is 0, colum is 1
     #if statement checks if it is in the array bounds
-    if(point2.x<state.shape[0] and point2.y<state.shape[1] and point2.x>=0 and point2.y>=0):
+    if(point2.y<state.shape[0] and point2.x<state.shape[1] and point2.x>=0 and point2.y>=0):
       #once it hits a point that is not the player then backtrack
       if(not(point2.checkVal(state,player))):
         return 0
@@ -237,11 +237,7 @@ class board(ASP[NDArray[np.int32], p.point]):
       :returns    possible action by the player
     """
     values:set[p.point]=set()
-    """for i in range(state.shape[0]):
-      for j in range(state.shape[1]):
-        if(state[i][j]==0):
-          values.add(p.point(i,j))"""
-    for i in range(state.shape[0]):
+    for i in range(state.shape[1]):
       #for j in range(state.shape[1]):
         if(state[0][i]==0):
           values.add(p.point(0,i))
