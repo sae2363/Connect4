@@ -70,7 +70,7 @@ class GUI:
 
     def on_button_click(self, column): # this function recieves the value of whatever move was selected (which button got pressed)
         column = column[1]
-        self.label1 = tk.Label(root, text=(column, "Button Clicked!"))
+        self.label1 = tk.Label(self.root, text=(column, "Button Clicked!"))
         self.label1.grid(row=0, column=0)
         
 
