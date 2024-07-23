@@ -3,11 +3,14 @@ from tkinter import *
 import numpy as np
 
 class GUI:
+    global root
+
     def __init__(self, root):
+
         self.root = root
         self.root.geometry("500x500")
         self.root.title("Connect 4")
-
+        
 
     def createBoard(self, state):
       
@@ -19,7 +22,7 @@ class GUI:
         gridSizeX = len(state) # Check the length of the array to know how many squares the grid needs to be
         gridSizeY = len(state[0])
 
-        self.buttonFrame = tk.Frame(root, height=20, width=300) # creaste a Frame object called board
+        self.buttonFrame = tk.Frame(self.root, height=20, width=300) # creaste a Frame object called board
 
         for i in range(gridSizeX):
             text = "^"+str(i)
@@ -45,10 +48,10 @@ class GUI:
         
         # Below is the connect 4 board 
 
-        gridSizeX = len(state) # Check the length of the array to know how many squares the grid needs to be
-        gridSizeY = len(state[0])
+        gridSizeX = len(state[0]) # Check the length of the array to know how many squares the grid needs to be
+        gridSizeY = len(state)
 
-        self.board = tk.Frame(root, height=300, width=300, relief='solid', borderwidth=1) # creaste a Frame object called board
+        self.board = tk.Frame(self.root, height=300, width=300, relief='solid', borderwidth=1) # creaste a Frame object called board
 
         for j in range(gridSizeX): # all the columns
             self.board.grid_columnconfigure(j,  weight =1, minsize=300/gridSizeX)
@@ -59,7 +62,7 @@ class GUI:
                 elif int(state[j][i]) == 2:
                     foregroundColor = 'red'
                 else: foregroundColor = 'black'
-                Label(self.board, text=int(state[j][i]), foreground=foregroundColor).grid(row=i, column=j)
+                Label(self.board, text=int(state[j][i]), foreground=foregroundColor).grid(row=j, column=i)
 
         self.board['relief'] = 'solid'
         self.board.grid(row=1, column=1) # Draw the board
@@ -69,9 +72,9 @@ class GUI:
         column = column[1]
         self.label1 = tk.Label(root, text=(column, "Button Clicked!"))
         self.label1.grid(row=0, column=0)
-        return int(column)
+        
 
-
+'''
 testState = np.zeros((6, 8))
 testState[1][1] = '1'
 testState[1][2] = '2'
@@ -79,4 +82,5 @@ testState[2][2] = '1'
 root = tk.Tk()
 app = GUI(root)
 app.createBoard(state=testState)
-root.mainloop()
+
+root.mainloop()'''

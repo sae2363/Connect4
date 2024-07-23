@@ -9,7 +9,7 @@ import numpy as np
 class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
     """A game-playing agent that chooses optimal actions using alpha-beta search."""
 
-    def choose_action(self, state: StateT) -> ActionT:
+    def choose_action(self, state: StateT, player) -> ActionT:
         """Select an action for the given state using the agent's strategy.
 
         The AlphaBetaAgent chooses actions using full-depth alpha-beta search.
@@ -18,9 +18,9 @@ class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
         :param      state       Game state
         :returns    Action chosen by the agent
         """
-        return self.alpha_beta_search(state)
+        return self.alpha_beta_search(state, player)
 
-    def alpha_beta_search(self, state: StateT) -> ActionT:
+    def alpha_beta_search(self, state: StateT, player) -> ActionT:
         """Compute the optimal action for the given state using alpha-beta search.
 
         Alpha - Value of the best choice yet found for MAX (i.e., highest value)
@@ -38,18 +38,18 @@ class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
 
         best_action = None  # To-be-found optimal action from the given state
 
-        if self._problem.player(state) == Player.MAX: # if turn is MAX
-            best_value = float['-inf']
+        if player == 1: # if turn is MAX
+            best_value = -10000
             for action in self._problem.actions(state): # iterate through actions
                 # print('MAX action', action) # for debugging
-                value = self.min_value(self._problem.result(state, action), float['-inf'], float['inf'])
+                value = self.min_value(self._problem.result(state, action), -10000, 10000)
                 if best_value<value: # get the best score in all the actions
                     best_value = value
                     best_action = action
         else:                                       # if turn is MIN
-            best_value = float['inf']
+            best_value = 10000
             for action in self._problem.actions(state):
-                value = self.max_value(self._problem.result(state, action), float['-inf'], float['inf'])
+                value = self.max_value(self._problem.result(state, action), -10000, 10000)
                 # print('MIN action', action) # for debugging
                 if best_value>value:
                     best_value = value
@@ -66,12 +66,12 @@ class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
         :param      beta        Value of the best found action for MIN (low value)
         :returns    Utility of the game state in which MAX has the next move
         """
-        assert self._problem.player(state) == Player.MAX, "Expected MAX player!"
+        assert self._problem.player(state) == 1, "Expected MAX player!"
 
         value = 0
         if self._problem.is_terminal(state):
             return self._problem.utility(state)
-        value = float['-inf']
+        value = -10000
         for action in self._problem.actions(state):
             value = max(value, self.min_value(self._problem.result(state, action), alpha, beta))
             if value >= beta:
@@ -87,17 +87,20 @@ class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
         :param      beta        Value of the best found action for MIN (low value)
         :returns    Utility of the game state in which MIN has the next move
         """
-        assert self._problem.player(state) == Player.MIN, "Expected MIN player!"
+        assert self._problem.player(state) == 2, "Expected MIN player!"
 
         value = 0
 
         if self._problem.is_terminal(state):
             return self._problem.utility(state)
-        value = float['inf']
+        value = 10000
         for action in self._problem.actions(state):
             value = min(value, self.max_value(self._problem.result(state, action), alpha, beta))
             if value <= alpha:
                 return value
             beta = max(beta, value)
         return value
+
+
+
 
