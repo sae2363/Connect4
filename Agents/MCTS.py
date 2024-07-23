@@ -30,17 +30,20 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         leafList=[]
         self.makeLeafList(root,leafList)
         startTime=time.time_ns()
-        timeToDecide=int(3*1000000000) #time in ns for bot to run MCTS
+        timeToDecide=int(1*1000000000) #time in ns for bot to run MCTS
         endTime=startTime+timeToDecide
         count=0
+        self.createTree(root.state,root,0,1)
         while(time.time_ns()<endTime):
-            node:n.node=self.findRandomLeaf(root)
+            node:n.node=self.findLeafUTC(root)
             nextNode=self.expand(node)
             result=self.playOut(np.copy(nextNode.state))
             #print(result)
             self.backTrack(nextNode,result)
             count+=1
-        #self.printTree(root)
+        #print("tree")
+        #self.printTree(root,3)
+        print("")
         print("Number of runs "+str(count))
         print("tree Size "+str(self.treeSize(root)))
         bestActionNode=self.getBest(root)
@@ -58,13 +61,20 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         pick the actions with the highest win rate
         question right now do i save the tree to use later or not
         """
-    def printTree(self,root:n.node, level=0):
+    def printTree(self,root:n.node,max :int, level=1):
+        if(level>max):
+            return None
         size=len(root.nextNodes)
-        for i in range(int(size/2)):
-            self.printTree(root.nextNodes[i],level + 1)
-        print("     " * level + " "+str(root.p1Win+root.p2Win))
-        for i in range(int(size/2)):
-            self.printTree(root.nextNodes[math.ceil(size/2)+i],level + 1)
+        #for i in range(int(size/2)):
+        #    self.printTree(root.nextNodes[i],level + 1)
+        if(root.player==1):
+            winNumber=root.p1Win
+        else:
+            winNumber=root.p2Win
+        print("       " * level + " "+str((int(((winNumber/(root.p1Win+root.p2Win))*1000))/1000.0)))
+        for i in range(size):#int(size/2)):
+            self.printTree(root.nextNodes[i],max,level + 1)#math.ceil(size/2)+i
+
     def treeSize(self,root:n.node):
         count=0
         if(len(root.nextNodes)==0):
@@ -86,7 +96,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             if(childPlay>maxPlay):
                 bestNode=child
                 maxPlay=childPlay
-            print(str(child.action)+"  "+str(child.p1Win+child.p2Win)+"  "+str(self.find_UCB1(child)))
+            #print(str(child.action)+"  "+str(child.p1Win+child.p2Win)+"  "+str(self.find_UCB1(child)))
         return bestNode
         
     def backTrack(self,root:n.node,winner:float):
@@ -123,28 +133,45 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             actionList.append(a)
         #try to remove dupe,  change the first one to a while loop
         i=0
+        #print("before")
+        """s=""
+        s2=""
+        for a in actionList:
+            s+= str(a)+"  "
+        print(s)
+        for b in root.nextNodes:
+            s2+= str(b)+"  "
+        print("action list")
+        print(s)
+        print("next nodes list")
+        print(s2)"""
+        s=""
+        value=True
         while (i<len(actionList)):
             for b in root.nextNodes:
-                if(actionList[i].x==b.action.x and actionList[i].y==b.action.y):
+                if(actionList[i].x==b.action.x and actionList[i].y==b.action.y and value):
                     del actionList[i]
                     i-=1
-                    break
+                    value=False
             i+=1
+        #print("after")
+        for a in actionList:
+            s+= str(a)+"  "
+        #print(s)
         action=random.choice(actionList)
         nextState=self._problem.result(root.state,action)
         node=n.node(nextState,root,self._problem.is_terminal(nextState),self._problem.player(nextState),action)
         root.nextNodes.append(node)
         return node
-    def createTree(self,state:np.array,root:n.node,depth:int):
-        if(depth<5 and not(self._problem.is_terminal(state))):
-            for a in self._problem.actions():
+    def createTree(self,state:np.array,root:n.node,depth:int,max:int):
+        if(depth<max and not(self._problem.is_terminal(state))):
+            for a in self._problem.actions(state):
                 isTerm=self._problem.is_terminal(self._problem.result(state,a))
                 player:int=self._problem.player(self._problem.result(state,a))
                 nextNode=n.node(self._problem.result(state,a),root,isTerm,player,a)
-                if(isTerm):
-                    nextNode.isTerminal(self._problem.who_is_winner(nextNode.state))
+                
                 root.nextNodes.append(nextNode)
-                self.createTree(nextNode.state,nextNode,depth+1)
+                self.createTree(nextNode.state,nextNode,depth+1,max)
     def makeLeafList(self,root:n.node,leafList:list):
         if(len(root.nextNodes)==0):
             leafList.append(root)
@@ -154,7 +181,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
     def findLeafUTC(self,root:n.node)->n.node:
         rootUTC=-100000000
         maxUTC=-100000000
-        bestNode:n.node
+        bestNode:n.node=None
         if(len(root.nextNodes)==0):
             return root
         if(len(root.nextNodes)!=len(self._problem.actions(root.state)) and root.parent!=None):
@@ -191,19 +218,19 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         #return self.findRandomLeaf(root)
     def find_UCB1(self,root:n.node)->float:
         winCount=0
-        if(root.player==1):
+        if(root.player==2):
             winCount=root.p1Win
         else:
             winCount=root.p2Win
         if(root.parent==None):
             try:
-                return 0
+                return -100
             except:
-                return 0 
+                return -100 
         try:
             ucb1=winCount/(root.p1Win+root.p2Win)+ math.sqrt(2)*math.sqrt(math.log(root.parent.p1Win+root.parent.p2Win)/(root.p1Win+root.p2Win))
         except:
-            ucb1=0
+            ucb1=1000
         return ucb1
     
 
