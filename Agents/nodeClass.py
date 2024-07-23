@@ -7,10 +7,11 @@ class node:
     state:np.array
     p1Win:int
     p2Win:int
-    total:int
+    totalUtil:int
     isTerminal:bool
     player:int
     action:point
+
 
     def __init__(self,stateArray:np.array,parent,isTerm,player:int,point:point):
         self.state=stateArray
@@ -22,6 +23,7 @@ class node:
         self.isTerminal=isTerm
         self.action=point
         self.player=player
+        self.totalUtil=0
     
     def isTerminal(self,winner):
         current=self

@@ -233,20 +233,18 @@ class board(ASP[NDArray[np.int32], p.point]):
     """
     Gives the set of the possible actions that can be taken as a set of points
 
-      Player "1" goes first (MAX), then "2" (MIN), etc.
-
       :Parameters  state:  A numpy array that represents the board
-      :returns    Player whose turn it is to move
+      :returns    possible action by the player
     """
     values:set[p.point]=set()
-    for i in range(state.shape[0]):
+    """for i in range(state.shape[0]):
       for j in range(state.shape[1]):
         if(state[i][j]==0):
-          values.add(p.point(i,j))
-    """for i in range(state.shape[0]):
+          values.add(p.point(i,j))"""
+    for i in range(state.shape[0]):
       #for j in range(state.shape[1]):
         if(state[0][i]==0):
-          values.add(p.point(i,0))"""
+          values.add(p.point(0,i))
     return values
   
   def result(self,state:np.array,action:p.point)-> np.array:

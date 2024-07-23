@@ -41,7 +41,7 @@ def runCLI():
         print("Player two wins")
 
 def runBotUTC(x,y):
-  game:b=b(5,4)
+  game:b=b(4,3)
   player_a = mc.MCTS(game)
   player_b = mc.MCTS(game)
   return runBots(game,player_a,player_b)

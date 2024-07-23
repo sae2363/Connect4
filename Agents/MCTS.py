@@ -6,6 +6,7 @@ import Agents.nodeClass as n
 import numpy as np
 import math,random
 import time
+import point
 
 class MCTS(AdversarialAgent[StateT, ActionT], ABC):
     """A game-playing agent defining a strategy for adversarial search problems."""
@@ -42,7 +43,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         """print("")
         print("Number of runs "+str(count))
         print("tree Size "+str(self.treeSize(root)))"""
-        self.printTree(root,3)
+        self.printTree(root,2)
         bestActionNode=self.getBest(root)
         return bestActionNode.action
 
@@ -54,8 +55,8 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
             winNumber=root.p1Win
         else:
             winNumber=root.p2Win
-        value=str(root.player)+" "+str(int(self.find_UCB1(root)*1000)/1000.0)#(int(((winNumber/(root.p1Win+root.p2Win))*1000))/1000.0)
-        print("       " * level + " "+str(value))
+        value=str(root.player)+" "+str(int(self.find_UCB1(root)*1000000)/1000000.0)+" "+str(root.action)#(int(((winNumber/(root.p1Win+root.p2Win))*1000))/1000.0)
+        print("        " * level + " "+str(value))
         for i in range(size):
             self.printTree(root.nextNodes[i],max,level + 1)
 
@@ -78,13 +79,12 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
     def backTrack(self,root:n.node,winner:float):
         current=root
         while(current!=None):
-            if(winner<=0.6 and winner>=0.4):
-                current.p1Win+=1
-                current.p2Win+=1
             if(winner>=0.6):
                 current.p1Win+=1
             if(winner<=0.4):
                 current.p2Win+=1
+            current.totalUtil+=winner
+            current.total+=1
             current=current.parent
             
 
@@ -100,14 +100,14 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
 
 
     def expand(self, root:n.node)->n.node:
-        actionList=[]
+        actionList:point.point=[]
         if(self._problem.is_terminal(root.state)):
             return root
         for a in self._problem.actions(root.state):
             actionList.append(a)
         i=0
-        value=True
         while (i<len(actionList)):
+            value=True
             for b in root.nextNodes:
                 if(actionList[i].x==b.action.x and value):
                     del actionList[i]
@@ -177,7 +177,7 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
         if(root.parent==None):
             return -100
         try:
-            ucb1=winCount/(root.p1Win+root.p2Win)+ math.sqrt(2)*math.sqrt(math.log(root.parent.p1Win+root.parent.p2Win)/(root.p1Win+root.p2Win))
+            ucb1=root.totalUtil/(root.total)+ math.sqrt(2)*math.sqrt(math.log(root.parent.total)/(root.total))
         except:
             ucb1=1000
         return ucb1
