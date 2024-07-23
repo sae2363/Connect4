@@ -7,7 +7,7 @@ import time
 
 def Test():   
 
-    g:b.board=b.board(4,4,3)
+    g:b.board=b.board(4,4,4)
 
     agent1 = ab.AlphaBeta(g) # max
     agent2 = ab.AlphaBeta(g) # min
