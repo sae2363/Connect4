@@ -1,6 +1,7 @@
 from Agents.ASPtwo import StateT, ActionT
 from Agents.agent import AdversarialAgent
 import point as p
+from gui import GUI
 
 
 class realAgent(AdversarialAgent[StateT, ActionT]):
@@ -18,16 +19,20 @@ class realAgent(AdversarialAgent[StateT, ActionT]):
 
         # Compute all legal moves and convert them to strings for printing
         legal_actions = self._problem.actions(state)
-        move_strings = [point.str() for point in legal_actions]
+        move_strings = [point.__str__() for point in legal_actions]
 
         assert move_strings, "Cannot prompt user to choose from zero legal moves!"
 
         user_input = None
         while True:  # Read user's input until a valid move is given
-            user_input = input(
-                f"Please select a legal move for {curr_player_str} ('q' to quit):"
+            print(f"Please select a legal move for {curr_player_str} ('q' to quit):"
                 + f"\n{move_strings}\n"
-            ).strip()
+            )
+
+            user_input = None
+
+            while user_input == None:
+                user_input = GUI.read_player_input()
 
             if user_input == "q":  # Quit the program if the user inputs "q"
                 exit()
