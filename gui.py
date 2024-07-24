@@ -3,13 +3,13 @@ from tkinter import *
 import numpy as np
 
 class GUI:
-    global root
 
     def __init__(self, root):
 
         self.root = root
         self.root.geometry("500x500")
         self.root.title("Connect 4")
+        self.label1 = tk.Label(self.root)
         
 
     def createBoard(self, state):
@@ -38,10 +38,7 @@ class GUI:
         self.agent1button = tk.Button(self.agentFrame, text='Monte Carlo Tree Search').grid()
         self.agent2button = tk.Button(self.agentFrame, text='Alpha-Beta Pruning (MINMAX)').grid()
 
-        # EXTRA
 
-        self.label1 = tk.Label(self.root, text="Connect 4")
-        self.label1.grid(row=0, column=0)
 
 
     def updateBoard(self, state):
@@ -73,9 +70,11 @@ class GUI:
         self.label1 = tk.Label(self.root, text=(column))
         self.label1.grid(row=0, column=0)
         return column
-    
-    def read_player_input(self):
-        return self.label1['text']
+
+    def act(self):
+        act = self.label1.cget('text')
+        self.label1 = tk.Label(self.root, text=None)
+        return act
         
 
 '''

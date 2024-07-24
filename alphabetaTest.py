@@ -5,6 +5,7 @@ import numpy as np
 from gui import GUI
 import tkinter as tk
 import time
+from point import point as p
 
 '''
 This file contains a test which will set up a game played by 2 alpha-beta agents against each other.
@@ -27,11 +28,11 @@ def TestAB():
     while not g.is_terminal(g.array):
 
         if g.current_player(g.array) == 1:
-            action1 = agent1.choose_action(g.array, 1)
+            action1 = agent1.choose_action(g.array)
             g.placePiece(g.array, action1.x, 1)
 
         elif g.current_player(g.array) == 2:
-            action2 = agent2.choose_action(g.array, 2)
+            action2 = agent2.choose_action(g.array)
             g.placePiece(g.array, action2.x, 2)
         
         print(g.current_player(g.array))
@@ -51,7 +52,6 @@ def TestReal():
     g:b.board=b.board(4,4,3)
 
     agent1 = ab.AlphaBeta(g) # max
-    agent2 = ra.realAgent(g) # min
 
     g.placePiece(g.array, 0, 1)
 
@@ -64,19 +64,25 @@ def TestReal():
     while not g.is_terminal(g.array):
 
         if g.current_player(g.array) == 1:
-            action1 = agent1.choose_action(g.array, 1)
+            action1 = agent1.choose_action(g.array)
             g.placePiece(g.array, action1.x, 1)
 
         elif g.current_player(g.array) == 2:
-            action2 = agent2.choose_action(g.array)
-            g.placePiece(g.array, action2.x, 2)
+            action2 = app.act()
+            action2 = p(0, action2)
+            legal_actions = g.actions(g.array)
+            move_strings = [point.__str__() for point in legal_actions]
+            if str(action2) in move_strings:
+                g.placePiece(g.array, int(action2.x), 2)
+            else:
+                print('need valid action')
         
         print(g.current_player(g.array))
         print(g.array)
 
         app.updateBoard(g.array)
         root.update()
-        time.sleep(2)
+
         
     print('DONE', g.who_is_winner(g.array))
 
