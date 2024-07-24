@@ -2,15 +2,15 @@ import numpy as np
 import Agents.nodeClass as node
 from point import point
 class node:
-    parent:node
-    nextNodes:list[node]
-    state:np.array
-    p1Win:int
-    p2Win:int
-    totalUtil:int
-    isTerminal:bool
-    player:int
-    action:point
+    parent:node#pointer up the tree
+    nextNodes:list[node]#children
+    state:np.array # state of borad at this node
+    p1Win:int #how many times p1 won
+    p2Win:int #how many times p2 won
+    totalUtil:int #Util total
+    isTerminal:bool #if the node has a state that is terminal 
+    player:int #whos move is it
+    action:point #move to get to this state
 
 
     def __init__(self,stateArray:np.array,parent,isTerm,player:int,point:point):
@@ -24,8 +24,8 @@ class node:
         self.action=point
         self.player=player
         self.totalUtil=0
-    
-    def isTerminal(self,winner):
+    #unneeded 
+    """def isTerminal(self,winner):
         current=self
         while(current!=None):
             if(winner==1):
@@ -33,6 +33,7 @@ class node:
             if(winner==2):
                 current.p2Win+=1
             current=current.parent
+    
     def updateWinner(self,winner):
         current=self
         while(current!=None):
@@ -40,7 +41,8 @@ class node:
                 current.p1Win+=1
             if(winner==2):
                 current.p2Win+=1
-            current=current.parent
+            current=current.parent"""
+    #print method for debuging
     def calculateFraction(self):
         total=self.p1Win+self.p2Win
         if total == 0:
@@ -52,6 +54,7 @@ class node:
         return "p1 win "+str(self.p1Win)+" p2 win "+str(self.p2Win)+" "+str(self.player)
     def __repr__(self):
         return self.__str__()
+    #print method for debuging
     def printTree(self, level=0):
         print("  " * level + self.calculateFraction())
         for child in self.nextNodes:

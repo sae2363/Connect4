@@ -36,8 +36,14 @@ def worker(thread_id, run_id):
 def worker1(thread_id, run_id):
     result = b.runBotUTC_Ran(thread_id, run_id)
     results_list.append(result)
+def worker2(thread_id, run_id):
+    result = b.runBotUTC_ab(thread_id, run_id)
+    results_list.append(result)
+def worker3(thread_id, run_id):
+    result = b.runBotab_ran(thread_id, run_id)
+    results_list.append(result)
 
-def submit_for_thread(method,total_runs=6,num_threads=3):
+def submit_for_thread(method,total_runs=20,num_threads=4):
     threads = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = []
@@ -47,7 +53,7 @@ def submit_for_thread(method,total_runs=6,num_threads=3):
         # Ensure all futures are completed
         concurrent.futures.wait(futures)
 results_list = []
-submit_for_thread(worker)
+submit_for_thread(worker2)
 #win rate of utc vs utc 
 x1=["Draw","P1_Win","P2_Win"]
 y1=[0,0,0]
@@ -61,6 +67,20 @@ x2=["Draw","P1_Win","P2_Win"]
 y2=[0,0,0]
 for i in results_list:
     y2[i]+=1
+
+submit_for_thread(worker2)
+#win rate of utc vs AB 
+x3=["Draw","P1_Win","P2_Win"]
+y3=[0,0,0]
+for i in results_list:
+    y3[i]+=1
+
+submit_for_thread(worker3)
+#win rate of AB vs random 
+x4=["Draw","P1_Win","P2_Win"]
+y4=[0,0,0]
+for i in results_list:
+    y4[i]+=1
 
 
 #data
@@ -82,21 +102,21 @@ graphs = [
         'y': y2
     },
     {
-        'type': 'scatter',
-        'title': 'Scatter Plot',
+        'type': 'bar',
+        'title': 'mc vs ab',
         'x_label': 'X-axis',
         'y_label': 'Y-axis',
-        'x': [1, 2, 3, 4, 5],
-        'y': [5, 4, 3, 2, 1]
+        'x': x3,
+        'y': y3
     },
     {
-        'type': 'hist',
-        'title': 'Histogram',
+        'type': 'bar',
+        'title': 'ab vs random',
         'x_label': 'Value',
         'y_label': 'Frequency',
-        'x': [],  # Histograms don't need x data
-        'y': [1, 2, 2, 3, 3, 3, 4, 4, 4, 4],
-        'bins': 4
+        'x': x4,  # Histograms don't need x data
+        'y': y4#,
+        #'bins': 4
     }
 ]
 

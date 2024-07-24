@@ -10,6 +10,7 @@ class point:
     def __repr__(self):
         return self.__str__()
     def checkVal(self,board,player):
+        """checks to see if the piece on the board is the value provided"""
         return board[self.y][self.x]==player 
     def __eq__(self, other):
         if isinstance(other, point):

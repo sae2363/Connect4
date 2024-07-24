@@ -9,7 +9,7 @@ import numpy as np
 class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
     """A game-playing agent that chooses optimal actions using alpha-beta search."""
 
-    def choose_action(self, state: StateT, player) -> ActionT:
+    def choose_action(self, state: StateT) -> ActionT:
         """Select an action for the given state using the agent's strategy.
 
         The AlphaBetaAgent chooses actions using full-depth alpha-beta search.
@@ -18,6 +18,8 @@ class AlphaBeta(AdversarialAgent[StateT, ActionT], ABC):
         :param      state       Game state
         :returns    Action chosen by the agent
         """
+        player=self._problem.player(state)
+
         return self.alpha_beta_search(state, player)
 
     def alpha_beta_search(self, state: StateT, player) -> ActionT:

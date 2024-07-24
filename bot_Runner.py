@@ -3,6 +3,7 @@ import Agents.MCTS as mc
 from Agents.randomAgent import randomAgent as ra
 import numpy as np
 from Agents.realAgent import realAgent as rl
+from Agents.alphabeta import AlphaBeta as ab
 
 def runCLI():
     row=None
@@ -71,21 +72,30 @@ def runBotUTC_Ran(x,y):
   player_b = ra(game)
   return runBots(game,player_a,player_b)
 
-def runBotUTC(x,y):
+def runBotUTC_ab(x,y):
   game:b=b(4,4,3)
   player_a = mc.MCTS(game)
-  player_b = mc.MCTS(game)
+  player_b = ab(game)
   return runBots(game,player_a,player_b)
+
+def runBotab_ran(x,y):
+  game:b=b(4,4,3)
+  player_a = ab(game)
+  player_b = ra(game)
+  return runBots(game,player_a,player_b)
+   
 
 def runBots(game,player_a,player_b):
   i=0
   while(not(game.is_terminal(game.array))):
-      print(game.array)
+      #print(game.array)
       if(i%2==0):
+          #print("p1")
           temp=player_a.choose_action(np.copy(game.array))
           game.placePiece(game.array,temp.x,1)
           i+=1
       else:
+          #print("p2")
           temp2=player_b.choose_action(np.copy(game.array))
           game.placePiece(game.array,temp2.x,2)
           i+=1

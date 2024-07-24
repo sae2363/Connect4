@@ -10,7 +10,7 @@ class randomAgent(AdversarialAgent[StateT, ActionT]):
     def choose_action(self, state: StateT) -> ActionT:
         """Select an action for the given state using the agent's strategy.
 
-        A REPL-based agent prompts the user via commandline to select the next move.
+        A agent that choose moves randomly
 
         :param      state       Game state
         :returns    Action chosen by the agent
