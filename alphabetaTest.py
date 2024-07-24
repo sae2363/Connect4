@@ -77,11 +77,10 @@ def TestReal():
             move_strings = [point.__str__() for point in legal_actions]
             if str(action2) in move_strings:
                 g.placePiece(g.array, int(action2.x), 2)
-            else:
-                print('need valid action')
 
         app.updateBoard(g.array)
         root.update()
+        time.sleep(1)
 
     print('DONE', g.who_is_winner(g.array))
 
