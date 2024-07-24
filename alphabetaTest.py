@@ -13,6 +13,9 @@ This file contains a test which will set up a game played by 2 alpha-beta agents
 
 
 def TestAB():   
+    '''
+    Will display the GUI and will run two alpha-beta agents playing against each other.
+    '''
 
     g:b.board=b.board(4,4,4)
 
@@ -48,12 +51,12 @@ def TestAB():
 
 
 def TestReal():   
-
+    '''
+    Will display the GUI and will run an alpha-beta agent (max) playing against the player input (min).
+    '''
     g:b.board=b.board(4,4,3)
 
     agent1 = ab.AlphaBeta(g) # max
-
-    g.placePiece(g.array, 0, 1)
 
     root = tk.Tk()
     app = GUI(root)
@@ -76,14 +79,10 @@ def TestReal():
                 g.placePiece(g.array, int(action2.x), 2)
             else:
                 print('need valid action')
-        
-        print(g.current_player(g.array))
-        print(g.array)
 
         app.updateBoard(g.array)
         root.update()
 
-        
     print('DONE', g.who_is_winner(g.array))
 
     root.mainloop()
