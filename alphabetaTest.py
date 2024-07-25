@@ -1,6 +1,6 @@
 import board as b
 import Agents.alphabeta as ab
-import Agents.realAgent as ra
+import Agents.MCTS as mc
 import numpy as np
 from gui import GUI
 import tkinter as tk
@@ -50,7 +50,7 @@ def TestAB():
     root.mainloop()
 
 
-def TestReal():   
+def PlayReal():   
     '''
     Will display the GUI and will run an alpha-beta agent (max) playing against the player input (min).
     '''
@@ -67,10 +67,14 @@ def TestReal():
     while not g.is_terminal(g.array):
 
         if g.current_player(g.array) == 1:
+            app.display_message('AI is choosing move...')
+            root.update()
             action1 = agent1.choose_action(g.array)
             g.placePiece(g.array, action1.x, 1)
 
         elif g.current_player(g.array) == 2:
+            app.display_message("Player's turn")
+            root.update()
             action2 = app.act()
             action2 = p(0, action2)
             legal_actions = g.actions(g.array)
@@ -86,5 +90,41 @@ def TestReal():
 
     root.mainloop()
 
+def TestMC():
+    '''
+    Will display the GUI and will run two Monte-Carlo Tree Search agents playing against each other.
+    '''
 
-TestReal()
+    g:b.board=b.board(4,4,3)
+
+    agent1 = mc.MCTS(g) # max
+    agent2 = mc.MCTS(g) # min
+
+    root = tk.Tk()
+    app = GUI(root)
+
+    app.createBoard(g.array)
+    root.update()
+
+    while not g.is_terminal(g.array):
+
+        if g.current_player(g.array) == 1:
+            action1 = agent1.choose_action(g.array)
+            g.placePiece(g.array, action1.x, 1)
+
+        elif g.current_player(g.array) == 2:
+            action2 = agent2.choose_action(g.array)
+            g.placePiece(g.array, action2.x, 2)
+        
+        print(g.current_player(g.array))
+        print(g.array)
+
+        app.updateBoard(g.array)
+        root.update()
+        time.sleep(2)
+        
+    print('DONE', g.who_is_winner(g.array))
+
+    root.mainloop()
+
+TestMC()

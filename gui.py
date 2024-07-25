@@ -10,6 +10,7 @@ class GUI:
         self.root.geometry("500x500")
         self.root.title("Connect 4")
         self.label1 = tk.Label(self.root)
+        self.label2 = tk.Label(self.root)
         
 
     def createBoard(self, state):
@@ -67,14 +68,18 @@ class GUI:
 
     def on_button_click(self, column): # this function recieves the value of whatever move was selected (which button got pressed)
         column = column[1]
-        self.label1 = tk.Label(self.root, text=(column))
-        self.label1.grid(row=0, column=0)
+        self.label2 = tk.Label(self.root, text=(column))
+        self.label2.grid(row=0, column=1)
         return column
 
     def act(self):
-        act = self.label1.cget('text')
-        self.label1 = tk.Label(self.root, text=None)
+        act = self.label2.cget('text')
+        self.label2 = tk.Label(self.root)
         return act
+    
+    def display_message(self, message):
+        self.label1.config(text=message)
+        self.label1.grid(row=0, column=0)
         
 
 '''
