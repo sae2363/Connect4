@@ -34,7 +34,8 @@ class MCTS(AdversarialAgent[StateT, ActionT], ABC):
 
         #Time limit for the search
         startTime=time.time_ns()
-        timeToDecide=int(0.5*1000000000) #time in ns for bot to run MCTS
+        timeInSeconds=np.random.uniform(0.5,2)
+        timeToDecide=int(timeInSeconds*1000000000) #time in ns for bot to run MCTS
         endTime=startTime+timeToDecide
         #used to count how many times the loop is run
         count=0
