@@ -93,7 +93,7 @@ def submit_for_thread(method,total_runs=8,num_threads=4):
         # Ensure all futures are completed
         concurrent.futures.wait(futures)
 results_list = []
-#submit_for_thread(worker())
+submit_for_thread(worker())
 #win rate of utc vs utc 
 x1=["Draw","P1_Win","P2_Win"]
 y1=[0,0,0]
@@ -101,21 +101,21 @@ for i in results_list:
     y1[i]+=1
 results_list = []
 
-#submit_for_thread(worker1)
+submit_for_thread(worker1)
 #win rate of utc vs random 
 x2=["Draw","P1_Win","P2_Win"]
 y2=[0,0,0]
 for i in results_list:
     y2[i]+=1
 results_list = []
-#submit_for_thread(worker2)
+submit_for_thread(worker2)
 #win rate of utc vs AB 
 x3=["Draw","P1_Win","P2_Win"]
 y3=[0,0,0]
 for i in results_list:
     y3[i]+=1
 results_list = []
-#submit_for_thread(worker3)
+submit_for_thread(worker3)
 #win rate of AB vs random 
 x4=["Draw","P1_Win","P2_Win"]
 y4=[0,0,0]
@@ -123,7 +123,7 @@ for i in results_list:
     y4[i]+=1
 results_list = []
 
-#submit_for_thread(worker4)
+submit_for_thread(worker4)
 # x is move number y is time
 x5=[]
 y5=[]
