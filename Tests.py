@@ -213,4 +213,4 @@ def TestMCvAB():
     root.mainloop()
 
 
-TestMCvAB()
+PlayMC()
