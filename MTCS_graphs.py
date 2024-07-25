@@ -83,7 +83,7 @@ def worker5():
     timeList.append(timeListOfMove)
     results_list.append(result)
 
-def submit_for_thread(method,total_runs=8,num_threads=4):
+def submit_for_thread(method,total_runs=16,num_threads=4):
     threads = []
     with concurrent.futures.ThreadPoolExecutor(max_workers=num_threads) as executor:
         futures = []
@@ -93,7 +93,7 @@ def submit_for_thread(method,total_runs=8,num_threads=4):
         # Ensure all futures are completed
         concurrent.futures.wait(futures)
 results_list = []
-submit_for_thread(worker())
+submit_for_thread(worker)
 #win rate of utc vs utc 
 x1=["Draw","P1_Win","P2_Win"]
 y1=[0,0,0]
@@ -123,7 +123,7 @@ for i in results_list:
     y4[i]+=1
 results_list = []
 
-submit_for_thread(worker4)
+#submit_for_thread(worker4)
 # x is move number y is time
 x5=[]
 y5=[]
@@ -134,11 +134,11 @@ for i in range(len(y5)):
 
 results_list = []
 timeList=[]
-submit_for_thread(worker5)
+#submit_for_thread(worker5)
 # x is move number y is time 
 x6=[]
 y6=[]
-y6=average_at_indices(timeList)
+#y6=average_at_indices(timeList)
 for i in range(len(y6)):
     x6.append(i)
 for i in results_list:

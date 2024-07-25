@@ -88,26 +88,33 @@ def runBotUTC():
 
 def runBotUTC_Ran():
   game:b=b(col,row,winBy)
-  game.placePiece(game.array,0,1)
-  player_a = mc.MCTS(game)
-  player_b = ra(game)
+  player_b = mc.MCTS(game)
+  player_a = ra(game)
+  """player_a = mc.MCTS(game)
+  player_b = ra(game)"""
   return runBots(game,player_a,player_b)
 
 def runBotUTC_ab():
   game:b=b(col,row,winBy)
-  player_a = mc.MCTS(game)
-  player_b = ab(game)
+  player_b = mc.MCTS(game)
+  player_a = ab(game)
+  """player_a = mc.MCTS(game)
+  player_b = ab(game)"""
   return runBots(game,player_a,player_b)
 
 def runBotab_ran():
   game:b=b(col,row,winBy)
-  player_a = ab(game)
-  player_b = ra(game)
+  player_a = ra(game)
+  player_b = ab(game)
+  """player_a = ab(game)
+  player_b = ra(game)"""
   return runBots(game,player_a,player_b)
 def runBotab_MCTS_Time():
   game:b=b(col,row,winBy)
-  player_a = ab(game)
-  player_b = mc.MCTS(game)
+  player_b = ab(game)
+  player_a = mc.MCTS(game)
+  """player_a = ab(game)
+  player_b = mc.MCTS(game)"""
   return runBotsWithTime(game,player_a,player_b)
 def runBotMCTS_MCTS_Time():
   game:b=b(col,row,winBy)
