@@ -1,11 +1,7 @@
-Hello
-This is the start of the project
-
 Authors:
 
 Kyle Huang
 and
 Alfonso Arnal
 
-
-Forever together
+Modify the agent tags in the MAIN file (select which agents you wish to play) and run the file.

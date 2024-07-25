@@ -55,7 +55,7 @@ def PlayAB():
     '''
     Will display the GUI and will run an alpha-beta agent (max) playing against the player input (min).
     '''
-    g:b.board=b.board(4,4,3)
+    g:b.board=b.board(4,4,4)
 
     agent1 = ab.AlphaBeta(g) # max
 
@@ -65,12 +65,17 @@ def PlayAB():
     app.createBoard(g.array)
     root.update()
 
+    m = 0
+
     while not g.is_terminal(g.array):
 
         if g.current_player(g.array) == 1:
             app.display_message('AI is choosing move...')
             root.update()
+            start=time.time()
             action1 = agent1.choose_action(g.array)
+            timeElapsed = time.time()-start
+            print(timeElapsed+' on move '+m)
             g.placePiece(g.array, action1.x, 1)
 
         elif g.current_player(g.array) == 2:
@@ -98,7 +103,7 @@ def TestMC():
     Will display the GUI and will run two Monte-Carlo Tree Search agents playing against each other.
     '''
 
-    g:b.board=b.board(7,7,4)
+    g:b.board=b.board(2,2,2)
 
     agent1 = mc.MCTS(g) # max
     agent2 = mc.MCTS(g) # min
@@ -213,4 +218,4 @@ def TestMCvAB():
     root.mainloop()
 
 
-PlayMC()
+PlayAB()

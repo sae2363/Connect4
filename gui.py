@@ -18,7 +18,6 @@ class GUI:
         self.updateBoard(state)
 
         # Below is the code for the buttons
-
         
         gridSizeX = len(state) # Check the length of the array to know how many squares the grid needs to be
         gridSizeY = len(state[0])
@@ -31,15 +30,6 @@ class GUI:
             Button(self.buttonFrame, text=text, command=lambda button_text=text: self.on_button_click(button_text)).grid(row=gridSizeY, column=i) # assign functionality
 
         self.buttonFrame.grid(row=2, column=1) # Draw the button board
-
-        # Below is the code for the AGENT BUTTONS
-
-        self.agentFrame = tk.Frame(self.root, relief='solid', borderwidth=1).grid()
-
-        self.agent1button = tk.Button(self.agentFrame, text='Monte Carlo Tree Search').grid()
-        self.agent2button = tk.Button(self.agentFrame, text='Alpha-Beta Pruning (MINMAX)').grid()
-
-
 
 
     def updateBoard(self, state):
