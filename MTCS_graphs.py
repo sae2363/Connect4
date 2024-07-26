@@ -123,22 +123,22 @@ for i in results_list:
     y4[i]+=1
 results_list = []
 
-#submit_for_thread(worker4)
+submit_for_thread(worker4)
 # x is move number y is time
 x5=[]
 y5=[]
 
-#y5=average_at_indices(timeList)
+y5=average_at_indices(timeList)
 for i in range(len(y5)):
     x5.append(i)
 
 results_list = []
 timeList=[]
-#submit_for_thread(worker5)
+submit_for_thread(worker5)
 # x is move number y is time 
 x6=[]
 y6=[]
-#y6=average_at_indices(timeList)
+y6=average_at_indices(timeList)
 for i in range(len(y6)):
     x6.append(i)
 for i in results_list:
