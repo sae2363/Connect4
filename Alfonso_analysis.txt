@@ -56,7 +56,7 @@ Experimental Setup:
 
 We can conclude, from my analysis and Kyle's, that these two algorithms have different applications depending on what one prioritizes and what a problem needs. Alpha-Beta is more reliable, but certainly slower than Monte-Carlo, while MC is faster, but can sometimes make an imperfect move. We think both these algorithms have possible optimizations that can be made to them, and we recognize that this is not at all a perfect test for these algorithms, however, it shows a general picture of the behavior, pros and cons of these algorithms.
 
-Contributions:
+Contributions to major files:
     board.py Kyle
     MCTS.py Kyle
     Alphabeta.py Alfonso
