@@ -124,7 +124,9 @@ def start():
     root.update()
     root.mainloop()
 
-
+def test():
+    #to be able to run via pytest
+    start()
 
 if __name__ == '__main__':
     start()

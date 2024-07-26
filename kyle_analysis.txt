@@ -1,9 +1,6 @@
-You will
-submit your implementation (i.e., source code) along with a writeup explaining 1) what you
-implemented, 2) your design decisions while doing so, 3) your experimental setup, and 4) your
-observed quantitative experimental results.
-
 Writeup of data seen and implementation of the game 
+
+Instruction to run program in the readme.md file
 
 The game connect 4:
 
