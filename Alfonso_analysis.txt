@@ -90,7 +90,7 @@ Contributions:
     gui.py Alfonso
     cli.py Kyle
     main.py Alfonso
-    MCTS_graphs Kyle
+    MCTS_graphs (MCTS data) Kyle
     Tests.py (ab data)  Alfonso
 
 
