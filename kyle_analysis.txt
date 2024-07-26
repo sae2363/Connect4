@@ -2,6 +2,8 @@ Writeup of data seen and implementation of the game
 
 Instruction to run program in the readme.md file
 
+This analysis is from kyles point of view and references to Alfonso one might be made.
+
 The game connect 4:
 
 The file board contains the various methods needed to run a adversarial search program.  A array is stored to
@@ -73,6 +75,10 @@ as I kept on tweaking the implementation provided in the book to see what works 
 had many errors which made it perform as good as a random agent.  After fixing the errors multiple times, it resulted 
 in the version displayed here.  
 
+Alphabeta
+
+    See Alfonso_analysis.txt for description
+
 Node class
 
 The node used in the tree.  It stores many variables but the main ones are parent, nextNodes,state,total, totalUtil.
@@ -117,6 +123,7 @@ MCTS time performance
 Alphabeta
     -The time it take alphabeta to run is very exponential
     -This does decrease exponentially and it becomes faster then MCTS after a few moves
+    -A more detailed analysis is present in Alfonso_analysis.txt
 
 Notable thing about the graphs
 
