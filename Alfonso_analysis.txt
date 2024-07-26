@@ -83,7 +83,7 @@ a problem needs. Alpha-Beta is more reliable, but certainly slower than Monte-Ca
 move. We think both these algorithms have possible optimizations that can be made to them, and we recognize that this is not at all a perfect
 test for these algorithms, however, it shows a general picture of the behavior, pros and cons of these algorithms.
 
-Contributions:
+Contributions to major files:
     board.py Kyle
     MCTS.py Kyle
     Alphabeta.py Alfonso
