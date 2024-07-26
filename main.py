@@ -20,8 +20,8 @@ def start():
     g:b.board=b.board(board_size,board_size,pieces_in_a_row)
 
     # ab.AlphaBeta(g) or mc.MCTS(g) or ra.randomAgent(g) or 'real'
-    agent1 = ab.AlphaBeta(g) # BLUE 
-    agent2 = 'real' # RED
+    agent1 = mc.MCTS(g) # BLUE 
+    agent2 = ab.AlphaBeta(g) # RED
 
 
 
