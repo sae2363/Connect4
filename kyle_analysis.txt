@@ -111,8 +111,23 @@ Notable thing about the graphs
 How does this apply to the real world?
     The project models a simple 2 player game.  While it appears simple,  these games can have quite complex strategy's.  For a computer to be able to play and beat a real human is a achievement.  These agents can action as ways to play these game alone or provide a greater challenge.
 
-How does the results tie in to properties of the algorithm?
-    Given monte carlos method is playing out the game to the n rather then considering every move, it not as exponential as alphabeta.  This is how it is able to maintain its constant timing in the graph as it can finsh a run faster then it has time to move.  Alpha beta on the other hand has a actual exponential curve as it consider the square root of every path which for a game like connect 4 is a lot of options.  My way of thinking about it is also think about how the game tree looks for MCTS vs AB. For ab it has the majority of nodes from root to terminal states, each non terminal one branching out to more option.  For MCTS it has paths that extend from the root that most likely are not every possible path.  Also they don't branch out if its part of the play out call.
+How does the results tie in to the properties of the algorithm?
+    Given monte carlos method is playing out the game to the n rather then considering every move, it not as exponential as alphabeta.  This is how it is able to maintain its constant timing in the graph as it can finish a run faster then it has time to move.  Alpha beta on the other hand has a actual exponential curve as it consider the square root of every path which for a game like connect 4 is a lot of options.  My way of thinking about it is also think about how the game tree looks for MCTS vs AB. For ab it has the majority of nodes from root to terminal states, each non terminal one branching out to more option.  For MCTS it has paths that extend from the root that most likely are not every possible path.  Also they don't branch out if its part of the play out call. making it more linear then exponential(kinda)
+
+Final Thoughts (Kyle Huang)
+
+    Overall the project and the initial idea seems daunting at first as without these algorithms I could have never made a game which can play against a person without another player.  As a first step in to the ai space,  I will keep on learning more in depth in to the field.  Now that I have stepped in to the field I think I can more confidently keep on pursuing it.
+
+Contributions:
+    board.py Kyle
+    MCTS.py Kyle
+    Alphabeta.py Alfonso
+    gui.py Alfonso
+    cli.py Kyle
+    main.py Alfonso
+    MCTS_graphs Kyle
+    Tests.py (ab data)  Alfonso
+
 
 
 

@@ -11,6 +11,7 @@ def runCLI():
     row=None
     col=None
     win=None
+    typeOfBot=None
     while row is None:
         user_input = input("Please input your desired row size (e.g., 3): ").strip()
 
@@ -40,7 +41,7 @@ def runCLI():
         except ValueError as e:
             print(f"{e}\nCannot parse given number. Please try again...\n")
     game:b=b(row,col,win)
-    player_a = rl(game)
+    #player_a = rl(game)
     match typeOfBot:
       case 0:
         player_b = mc.MCTS(game)
