@@ -14,14 +14,14 @@ Notes: p1 is max and p2 is min
 def start():
 
     # NOTE: If using Alpha-Beta, we do not recommend anything over 4x4, as the processing times are very long.
-    board_size = 4
+    board_size = 7
     pieces_in_a_row = 4
 
     g:b.board=b.board(board_size,board_size,pieces_in_a_row)
 
     # ab.AlphaBeta(g) or mc.MCTS(g) or ra.randomAgent(g) or 'real'
     agent1 = mc.MCTS(g) # BLUE 
-    agent2 = ab.AlphaBeta(g) # RED
+    agent2 = mc.MCTS(g) # RED
 
 
 
