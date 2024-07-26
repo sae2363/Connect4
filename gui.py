@@ -69,7 +69,7 @@ class GUI:
     
     def display_message(self, message):
         self.label1.config(text=message)
-        self.label1.grid(row=0, column=0)
+        self.label1.grid(row=4, column=2)
         
 
 '''

@@ -15,13 +15,13 @@ def start():
 
     # NOTE: If using Alpha-Beta, we do not recommend anything over 4x4, as the processing times are very long.
     board_size = 4
-    pieces_in_a_row = 3
+    pieces_in_a_row = 4
 
     g:b.board=b.board(board_size,board_size,pieces_in_a_row)
 
     # ab.AlphaBeta(g) or mc.MCTS(g) or ra.randomAgent(g) or 'real'
     agent1 = ab.AlphaBeta(g) # BLUE 
-    agent2 = mc.MCTS(g) # RED
+    agent2 = 'real' # RED
 
 
 
@@ -58,7 +58,7 @@ def start():
             root.update()
             time.sleep(1)
 
-    elif agent2 == 'real':
+    elif agent1 == 'real':
         while not g.is_terminal(g.array):
 
             if g.current_player(g.array) == 2:
@@ -81,7 +81,7 @@ def start():
             root.update()
             time.sleep(1)
 
-    elif agent1 == 'real':
+    elif agent2 == 'real':
         while not g.is_terminal(g.array):
 
             if g.current_player(g.array) == 1:
@@ -90,7 +90,7 @@ def start():
                 action1 = agent1.choose_action(g.array)
                 g.placePiece(g.array, action1.x, 1)
 
-            elif g.current_player(g.array) == 1:
+            elif g.current_player(g.array) == 2:
                 app.display_message("Player's turn")
                 root.update()
                 action2 = app.act()
