@@ -19,3 +19,9 @@ If you want to run the code to get the data used in kyle's analysis, run the MTC
 More detailed analysis is located in the txt files
 
 Each analysis has some overlap but are better detailed on the section of the projects we worked on.
+
+Notes:
+
+Some code could have been better written but for time reasons and enviorment issues, extra files might exist.  
+
+Alpha beta is allow unlimted time to run while MCTS is stuck in a range of 0.5 to 2 seconds so on boards larger then the real connect 4 game,  MCTS will lose it accuracy.
