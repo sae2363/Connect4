@@ -5,8 +5,16 @@ Instruction to run program in the readme.md file
 The game connect 4:
 
 The file board contains the various methods needed to run a adversarial search program.  A array is stored to
-represent the games board as a state with 0 being empty space, 1 being player one, and 2 being player two. When a game piece is placed it always starts at the top of the array and move down the colum if the space is 0 until it 
-reaches a empty space. Actions are represented as point objects, the x value representing the colum and y the row it is being placed in. In the initial version of this game, actions would return every open spot so the y value was needed but it was subsequently removed as it was unneeded for performance reasons. The reason it is still in the code is point is needed to check a single spot to see if someone won to save on performance. More formally a state of the game is a np.array object.  The overall format of the code is very similar to assignment 1 code as I found it to be a good format.  The board.py implements the asp abstract class as well.  The board object can be constructed with how many rows, columns, and pieces in a row needed to win.  This I will get in to in more detail later for performance.
+represent the games board as a state with 0 being empty space, 1 being player one, and 2 being player two. When 
+a game piece is placed it always starts at the top of the array and move down the colum if the space is 0 until it 
+reaches a empty space. Actions are represented as point objects, the x value representing the colum and y the row 
+it is being placed in. In the initial version of this game, actions would return every open spot so the y value was 
+needed but it was subsequently removed as it was unneeded for performance reasons. The reason it is still in the 
+code is point is needed to check a single spot to see if someone won to save on performance. More formally a state 
+of the game is a np.array object.  The overall format of the code is very similar to assignment 1 code as I found it
+to be a good format.  The board.py implements the asp abstract class as well.  The board object can be constructed 
+with how many rows, columns, and pieces in a row needed to win.  This I will get in to in more detail later for 
+performance.
 
 Main Classes
     MCTS.py: Monte Carlo Tree search code
@@ -27,7 +35,8 @@ Main functions
     agents
         -choose_action(): Chooses a action with the state
 
-There were no challenges for me to implement the classes outside over testing.  It was quick to get everything up and running but the fine-tuning took a while to do and I could have spent less time doing it.
+There were no challenges for me to implement the classes outside over testing.  It was quick to get everything up 
+and running but the fine-tuning took a while to do and I could have spent less time doing it.
 
 The agents
 
@@ -39,11 +48,14 @@ There are 4 agents that are able to play the game
 
 Note on python files
 
-    Due to a slight issue I had with imports and running the files,  I made a copy of the classes for the files.  This was because some files in subdirectories could not access classes in the parent directories using VS code's run button. 
+    Due to a slight issue I had with imports and running the files,  I made a copy of the classes for the files.  
+    This was because some files in subdirectories could not access classes in the parent directories using VS code's 
+    run button. 
 
 MCTS
 
-My implementation of Monte Carlos Tree search is based on the AIMA books approach with UTC to improve further upon it. It works in the following steps to pick a action
+My implementation of Monte Carlos Tree search is based on the AIMA books approach with UTC to improve further upon it.
+It works in the following steps to pick a action
 
     -Create a root node for the game tree with the current state
     -Sets a time limit for the algorithm (0.5-2 seconds)
@@ -55,24 +67,36 @@ My implementation of Monte Carlos Tree search is based on the AIMA books approac
         -update the tree by going up it with who won
     -From the root node,  pick the child with the most playouts and use the action it contains as the chosen move
 
-This approach work extremely well, as it is able to beat both me and my partner many times while running extremely fast.  More details in the data analysis section.  This algorithm took about 4 days and 2 hours each day to implement as I kept on tweaking the implementation provided in the book to see what works best.  My first version did work but had many errors which made it perform as good as a random agent.  After fixing the errors multiple times, it resulted in the version displayed here.  
+This approach work extremely well, as it is able to beat both me and my partner many times while running extremely 
+fast. More details in the data analysis section.  This algorithm took about 4 days and 2 hours each day to implement 
+as I kept on tweaking the implementation provided in the book to see what works best.  My first version did work but 
+had many errors which made it perform as good as a random agent.  After fixing the errors multiple times, it resulted 
+in the version displayed here.  
 
 Node class
 
-The node used in the tree.  It stores many variables but the main ones are parent, nextNodes,state,total, totalUtil.  All of which are used in MCTS
+The node used in the tree.  It stores many variables but the main ones are parent, nextNodes,state,total, totalUtil.
+All of which are used in MCTS.
 
 Point class
 
-The point class stores just a x and y value.  x is the colum and y is the row.  One confusing thing is it is initialized (row, colum) or in the case of how it is stored (y,x).  It also contains a method that is used to check if the place in the board that the point corresponds to is the number put in as a player
+The point class stores just a x and y value.  x is the colum and y is the row.  One confusing thing is it is 
+initialized (row, colum) or in the case of how it is stored (y,x).  It also contains a method that is used to 
+check if the place in the board that the point corresponds to is the number put in as a player
 
 Experiment set up and how we got graph images 1 and 2
 
-In the python file MCTS_graphs and bot_runner.py,  we test the various algorithm vs each other. The bot_runner.py is a simple script that goes back and fourth between the agents to run them and select moves.  Time is gather starting at when its the players turn and ends when it a action is received and placed.  This is then put in to a list to be used as the data points. graph 1-4 in each image is a simple win loss draw rate and 5+6 is how long each move took.
+In the python file MCTS_graphs and bot_runner.py,  we test the various algorithm vs each other. The bot_runner.py 
+is a simple script that goes back and fourth between the agents to run them and select moves.  Time is gather 
+starting at when its the players turn and ends when it a action is received and placed.  This is then put in to a 
+list to be used as the data points. graph 1-4 in each image is a simple win loss draw rate and 5+6 is how long each 
+move took.
 
 Data analysis on graph 1 and 2
 
 Notes: 
-    -With the size of the game being smaller,  the game is "solved" by the algorithm.  With this, P1 is able to almost always win.
+    -With the size of the game being smaller,  the game is "solved" by the algorithm.  With this, P1 is able to 
+    almost always win.
     -Data graph 2 is the same as graph 1 but p1 and p2 are flipped and only 16 runs per graph verse 20 runs in graph 1
 
 
@@ -81,7 +105,8 @@ MCTS performance vs other agents
     -It is even able to beat me quite often
 
 Alphabeta performance vs other agents
-    -It is able to win by a landslide verse a random agent showing it still is making smart decisions even when it lost to MCTS by a landslide
+    -It is able to win by a landslide verse a random agent showing it still is making smart decisions even when it 
+    lost to MCTS by a landslide
     -It is able to also beat Alfonso on a 4 by 4 board win by 3
 
 MCTS time performance
@@ -102,18 +127,31 @@ Notable thing about the graphs
         -There is a outlier in the time it takes MCTS to run in the last graph as it should be constant
     -Data_Graph_two
         -Results here show player ones advantage over player 2 even when the agent used to play them is flipped 
-        -One case where this is shown is in random vs alpha beta as they tie in how often they win verse the landslide if alphabeta went first
+        -One case where this is shown is in random vs alpha beta as they tie in how often they win verse the 
+        landslide if alphabeta went first
         -Time data was not taken this time as it should remain along a similar curve for both
 
 How does this apply to the real world?
-    The project models a simple 2 player game.  While it appears simple,  these games can have quite complex strategy's.  For a computer to be able to play and beat a real human is a achievement.  These agents can action as ways to play these game alone or provide a greater challenge.
+    The project models a simple 2 player game.  While it appears simple,  these games can have quite complex 
+    strategy's.  For a computer to be able to play and beat a real human is a achievement.  These agents can 
+    action as ways to play these game alone or provide a greater challenge.
 
 How does the results tie in to the properties of the algorithm?
-    Given monte carlos method is playing out the game to the n rather then considering every move, it not as exponential as alphabeta.  This is how it is able to maintain its constant timing in the graph as it can finish a run faster then it has time to move.  Alpha beta on the other hand has a actual exponential curve as it consider the square root of every path which for a game like connect 4 is a lot of options.  My way of thinking about it is also think about how the game tree looks for MCTS vs AB. For ab it has the majority of nodes from root to terminal states, each non terminal one branching out to more option.  For MCTS it has paths that extend from the root that most likely are not every possible path.  Also they don't branch out if its part of the play out call. making it more linear then exponential(kinda)
+    Given monte carlos method is playing out the game to the n rather then considering every move, it not as 
+    exponential as alphabeta.  This is how it is able to maintain its constant timing in the graph as it can 
+    finish a run faster then it has time to move.  Alpha beta on the other hand has a actual exponential curve 
+    as it consider the square root of every path which for a game like connect 4 is a lot of options.  My way 
+    of thinking about it is also think about how the game tree looks for MCTS vs AB. For ab it has the majority 
+    of nodes from root to terminal states, each non terminal one branching out to more option.  For MCTS it has 
+    paths that extend from the root that most likely are not every possible path.  Also they don't branch out if 
+    its part of the play out call. making it more linear then exponential(kinda)
 
 Final Thoughts (Kyle Huang)
 
-    Overall the project and the initial idea seems daunting at first as without these algorithms I could have never made a game which can play against a person without another player.  As a first step in to the ai space,  I will keep on learning more in depth in to the field.  Now that I have stepped in to the field I think I can more confidently keep on pursuing it.
+    Overall the project and the initial idea seems daunting at first as without these algorithms I could have never 
+    made a game which can play against a person without another player.  As a first step in to the ai space,  I will 
+    keep on learning more in depth in to the field.  Now that I have stepped in to the field I think I can more 
+    confidently keep on pursuing it.
 
 Contributions:
     board.py Kyle
@@ -122,7 +160,7 @@ Contributions:
     gui.py Alfonso
     cli.py Kyle
     main.py Alfonso
-    MCTS_graphs Kyle
+    MCTS_graphs (MCTS data) Kyle
     Tests.py (ab data)  Alfonso
 
 
