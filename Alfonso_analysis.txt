@@ -37,22 +37,22 @@ Problem Setting:
     These algorithms are really good for simple state space search problems like this game, however, even in a simple game such as Connect 4, we found limitations on the capacities of these algorithms for larger and more complex problems. I consider that these algorithms can be very useful in these smaller and simpler games, but may be unviable for bigger and more complex cases (or at least require some modifications to make them viable). 
 
 
-Experimental Setup:
+Experimental Setup (this mainly covers Alpha-Beta, but includes information about Monte Carlo):
     Alpha-Beta:
 
         What is Alpha-Beta:
 
             Alpha Beta (AB) is an algorithm that optimizes the performance of the Minimax Algorithm by ignoring (or "pruning") certain branches of the search tree, reducing the amount of operations that need to be done considerably. It does so by not exploring further any branch that allows the opponent to achieve a more favorable position to them (and unfavorable to the Alpha-Beta agent). In other words, since the AB agent will not play this move/node (because it allows the opponent a better position), it makes no sense to explore that resulting branch any further.
 
-        Our implementation:
+        Our implementations:
 
             Alpha-Beta's accuracy:
 
-                On our Connect 4 project, alpha-beta proved to consistently win against the random agent and against the player, and achieve a tie pretty consistently when it plays as the second player. It consistently beat me, a skilled individual at Connect 4 (on a 4x4 grid with 4 in a row).
+                On our Connect 4 project, alpha-beta proved to consistently win against the random agent and against the player, and achieve a tie pretty consistently when it plays as the second player. It consistently beat me, a skilled individual at Connect 4 (on a 4x4 grid with 4 in-a-row and 3 in-a-row).
 
             Times and performance:
 
-                In our implementation, Alpha-Beta is guaranteed to play the best move in the entire tree (because it explores the entire tree (except for the branches it knows can not be the best)), unlike Monte Carlo Tree Search (MCTS), which can only play the best move it has explored by the time limit. This makes AB a more reliable better player, but it makes it noticeably slower than our implementation of Monte Carlo. We can observe (See Data Graph 1) an exponential decrease in the time AB takes to place a piece the further the game progresses (the more pieces there are on the board). This makes processing time for later moves quite fast, but it also means AB takes a very long time to make the first moves (particularly the first one). In our testing, we found it unfeasible to apply AB to a board size bigger than 4x4 and with a bigger win condition (how many pieces in a row) than 3, since the processing time was incredibly long. The first move on a 4x4 3-in-a-row game was already 80 seconds, and it increased noticeably from there.
+                In our implementation, Alpha-Beta is guaranteed to play the best move in the entire tree (because it explores the entire tree (except for the branches it knows can not be the best)), unlike Monte Carlo Tree Search (MCTS), which can only play the best move it has explored by the time limit (further covered in Kyle's analysis). This makes AB a more reliable better player, but it makes it noticeably slower than our implementation of Monte Carlo. We can observe (See Data Graph 1) an exponential decrease in the time AB takes to place a piece the further the game progresses (the more pieces there are on the board). This makes processing time for later moves quite fast, but it also means AB takes a very long time to make the first moves (particularly the first one). In our testing, we found it unfeasible to apply AB to a board size bigger than 4x4 and with a bigger win condition (how many pieces in a row) than 3, since the processing time was incredibly long. The first move on a 4x4 3-in-a-row game was already 80 seconds, and it increased noticeably from there.
 
 We can conclude, from my analysis and Kyle's, that these two algorithms have different applications depending on what one prioritizes and what a problem needs. Alpha-Beta is more reliable, but certainly slower than Monte-Carlo, while MC is faster, but can sometimes make an imperfect move. We think both these algorithms have possible optimizations that can be made to them, and we recognize that this is not at all a perfect test for these algorithms, however, it shows a general picture of the behavior, pros and cons of these algorithms.
 
