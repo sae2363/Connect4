@@ -1,7 +1,7 @@
 
 
 We implemented 2 AI algorithms (Monte Carlo Tree Search & Alpha-Beta) that play Connect 4 on a customizable board.
-The board can be customized to have different dimentions, and to require any number of pieces in a row to win.
+The board can be customized to have different dimensions, and to require any number of pieces in a row to win.
 We decided to implement a very simple GUI to make playing against the agents more enjoyable and make their moves 
 clearer.
 
@@ -25,7 +25,7 @@ Design:
         board:
             - placePiece() -> places a piece on the board
             - checkWin() -> from a point, checks to see if the player won
-            - current_player() -> inputs a state and outputa who's turn it is to move
+            - current_player() -> inputs a state and outputs who's turn it is to move
             - isTerminal() -> takes in a state and outputs if it is possible to make a move or if someone has won
             - utility() -> outputs the value for a terminal state to be min/maxed 
         agents:
