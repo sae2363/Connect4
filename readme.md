@@ -25,3 +25,22 @@ Notes:
 Some code could have been better written but for time reasons and enviorment issues, extra files might exist.  
 
 Alpha beta is allow unlimted time to run while MCTS is stuck in a range of 0.5 to 2 seconds so on boards larger then the real connect 4 game,  MCTS will lose it accuracy.
+
+Contributions to major files:
+
+    board.py Kyle
+    
+    MCTS.py Kyle
+    
+    Alphabeta.py Alfonso
+    
+    gui.py Alfonso
+    
+    cli.py Kyle
+    
+    main.py Alfonso
+    
+    MCTS_graphs Kyle
+    
+    Tests.py (ab data)  Alfonso
+    
